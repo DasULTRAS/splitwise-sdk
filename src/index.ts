@@ -37,7 +37,7 @@ export class SplitwiseClient {
   /**
    * Hilfsmethode, um Query-Strings aus einem Objekt zu erzeugen.
    */
-  private buildQueryString(params: Record<string, any>): string {
+  private buildQueryString(params: Record<string, unknown>): string {
     const qs = new URLSearchParams();
     for (const key in params) {
       if (params[key] !== undefined && params[key] !== null) {
@@ -67,7 +67,7 @@ export class SplitwiseClient {
       this.oauth2!.getOAuthAccessToken(
         "",
         { grant_type: "client_credentials" },
-        (err, token, refreshToken, results) => {
+        (err, token) => {
           if (err) {
             reject(err);
           } else {
@@ -95,10 +95,10 @@ export class SplitwiseClient {
   async request<T>(
     endpoint: string,
     method: "GET" | "POST" = "GET",
-    body?: any
+    body?: unknown
   ): Promise<T> {
     const token = await this.fetchAccessToken();
-    let url = `${this.apiUrl}${endpoint}`;
+    const url = `${this.apiUrl}${endpoint}`;
     const headers: Record<string, string> = {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -239,12 +239,12 @@ export class SplitwiseClient {
     return this.request<T>(endpoint, "GET");
   }
 
-  async createExpense<T>(body: any): Promise<T> {
+  async createExpense<T>(body: unknown): Promise<T> {
     // body kann entweder vom Typ "equal_group_split" oder "by_shares" sein
     return this.request<T>("create_expense", "POST", body);
   }
 
-  async updateExpense<T>(id: number, body: any): Promise<T> {
+  async updateExpense<T>(id: number, body: unknown): Promise<T> {
     return this.request<T>(`update_expense/${id}`, "POST", body);
   }
 
