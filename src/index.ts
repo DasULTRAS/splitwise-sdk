@@ -1,7 +1,6 @@
-// src/index.ts
-
 import { OAuth2 } from "oauth";
-import SplitwiseOptions from "./types/SplitwiseOptions";
+import SplitwiseOptions from "@/types/SplitwiseOptions";
+import * as types from "@/types/api";
 
 export class SplitwiseClient {
   private consumerKey?: string;
@@ -116,177 +115,161 @@ export class SplitwiseClient {
         `API-Anfrage fehlgeschlagen: ${response.status} ${response.statusText} – ${errorBody}`
       );
     }
-    return response.json();
+    return response.json() as T;
   }
 
   // === API-Funktionen basierend auf der OpenAPI-Definition ===
 
   // Users
-  async getCurrentUser<T>(): Promise<T> {
-    return this.request<T>("get_current_user", "GET");
+  async getCurrentUser(): Promise<types.GetCurrentUserResponse> {
+    return this.request("get_current_user", "GET");
   }
 
-  async getUser<T>(id: number): Promise<T> {
-    return this.request<T>(`get_user/${id}`, "GET");
+  async getUser(id: number): Promise<types.GetUserResponse> {
+    return this.request(`get_user/${id}`, "GET");
   }
 
-  async updateUser<T>(
+  async updateUser(
     id: number,
-    body: {
-      first_name?: string;
-      last_name?: string;
-      email?: string;
-      password?: string;
-      locale?: string;
-      default_currency?: string;
-    }
-  ): Promise<T> {
-    return this.request<T>(`update_user/${id}`, "POST", body);
+    body: types.UpdateUserRequest
+  ): Promise<types.UpdateUserResponse> {
+    return this.request(`update_user/${id}`, "POST", body);
   }
 
   // Groups
-  async getGroups<T>(): Promise<T> {
-    return this.request<T>("get_groups", "GET");
+  async getGroups(): Promise<types.GetGroupResponse> {
+    return this.request("get_groups", "GET");
   }
 
-  async getGroup<T>(id: number): Promise<T> {
-    return this.request<T>(`get_group/${id}`, "GET");
+  async getGroup(id: number): Promise<types.GetGroupResponse> {
+    return this.request(`get_group/${id}`, "GET");
   }
 
-  async createGroup<T>(body: {
-    name: string;
-    group_type?: "home" | "trip" | "couple" | "other" | "apartment" | "house";
-    simplify_by_default?: boolean;
-    [key: string]: string | number | boolean | undefined;
-  }): Promise<T> {
-    return this.request<T>("create_group", "POST", body);
+  async createGroup(
+    body: types.CreateGroupRequest
+  ): Promise<types.CreateGroupResponse> {
+    return this.request("create_group", "POST", body);
   }
 
-  async deleteGroup<T>(id: number): Promise<T> {
-    return this.request<T>(`delete_group/${id}`, "POST");
+  async deleteGroup(id: number): Promise<types.DeleteGroupResponse> {
+    return this.request(`delete_group/${id}`, "POST");
   }
 
-  async undeleteGroup<T>(id: number): Promise<T> {
-    return this.request<T>(`undelete_group/${id}`, "POST");
+  async undeleteGroup(id: number): Promise<types.UndeleteGroupResponse> {
+    return this.request(`undelete_group/${id}`, "POST");
   }
 
-  async addUserToGroup<T>(body: {
-    group_id?: number;
-    user_id?: number;
-    first_name?: string;
-    last_name?: string;
-    email?: string;
-  }): Promise<T> {
-    return this.request<T>("add_user_to_group", "POST", body);
+  async addUserToGroup(
+    body: types.AddUserToGroupRequest
+  ): Promise<types.AddUserToGroupResponse> {
+    return this.request("add_user_to_group", "POST", body);
   }
 
-  async removeUserFromGroup<T>(body: {
+  async removeUserFromGroup(body: {
     group_id: number;
     user_id: number;
-  }): Promise<T> {
-    return this.request<T>("remove_user_from_group", "POST", body);
+  }): Promise<types.RemoveUserFromGroupResponse> {
+    return this.request("remove_user_from_group", "POST", body);
   }
 
   // Friends
-  async getFriends<T>(): Promise<T> {
-    return this.request<T>("get_friends", "GET");
+  async getFriends(): Promise<types.GetFriendsResponse> {
+    return this.request("get_friends", "GET");
   }
 
-  async getFriend<T>(id: number): Promise<T> {
-    return this.request<T>(`get_friend/${id}`, "GET");
+  async getFriend(id: number): Promise<types.GetFriendResponse> {
+    return this.request(`get_friend/${id}`, "GET");
   }
 
-  async createFriend<T>(body: {
-    user_email?: string;
-    user_first_name?: string;
-    user_last_name?: string;
-  }): Promise<T> {
-    return this.request<T>("create_friend", "POST", body);
+  async createFriend(
+    body: types.CreateFriendRequest
+  ): Promise<types.CreateFriendResponse> {
+    return this.request("create_friend", "POST", body);
   }
 
-  async createFriends<T>(body: { [key: string]: string }): Promise<T> {
-    return this.request<T>("create_friends", "POST", body);
+  async createFriends(
+    body: types.CreateFriendsResponse
+  ): Promise<types.CreateFriendsResponse> {
+    return this.request("create_friends", "POST", body);
   }
 
-  async deleteFriend<T>(id: number): Promise<T> {
-    return this.request<T>(`delete_friend/${id}`, "POST");
+  async deleteFriend(id: number): Promise<types.DeleteFriendResponse> {
+    return this.request(`delete_friend/${id}`, "POST");
   }
 
   // Currencies
-  async getCurrencies<T>(): Promise<T> {
-    return this.request<T>("get_currencies", "GET");
+  async getCurrencies(): Promise<types.GetCurrenciesResponse> {
+    return this.request("get_currencies", "GET");
   }
 
   // Expenses
-  async getExpense<T>(id: number): Promise<T> {
-    return this.request<T>(`get_expense/${id}`, "GET");
+  async getExpense(id: number): Promise<types.GetExpenseResponse> {
+    return this.request(`get_expense/${id}`, "GET");
   }
 
-  async getExpenses<T>(queryParams?: {
-    group_id?: number;
-    friend_id?: number;
-    dated_after?: string;
-    dated_before?: string;
-    updated_after?: string;
-    updated_before?: string;
-    limit?: number;
-    offset?: number;
-  }): Promise<T> {
+  async getExpenses(
+    queryParams?: types.GetExpensesRequestParams
+  ): Promise<types.GetExpensesResponse> {
     let endpoint = "get_expenses";
     if (queryParams && Object.keys(queryParams).length > 0) {
       endpoint += "?" + this.buildQueryString(queryParams);
     }
-    return this.request<T>(endpoint, "GET");
+    return this.request(endpoint, "GET");
   }
 
-  async createExpense<T>(body: unknown): Promise<T> {
+  async createExpense(
+    body: types.CreateExpenseRequest
+  ): Promise<types.CreateExpenseResponse> {
     // body kann entweder vom Typ "equal_group_split" oder "by_shares" sein
-    return this.request<T>("create_expense", "POST", body);
+    return this.request("create_expense", "POST", body);
   }
 
-  async updateExpense<T>(id: number, body: unknown): Promise<T> {
-    return this.request<T>(`update_expense/${id}`, "POST", body);
+  async updateExpense(
+    id: number,
+    body: types.UpdateExpenseRequest
+  ): Promise<types.UpdateExpenseResponse> {
+    return this.request(`update_expense/${id}`, "POST", body);
   }
 
-  async deleteExpense<T>(id: number): Promise<T> {
-    return this.request<T>(`delete_expense/${id}`, "POST");
+  async deleteExpense(id: number): Promise<types.DeleteExpenseResponse> {
+    return this.request(`delete_expense/${id}`, "POST");
   }
 
-  async undeleteExpense<T>(id: number): Promise<T> {
-    return this.request<T>(`undelete_expense/${id}`, "POST");
+  async undeleteExpense(id: number): Promise<types.UndeleteExpenseResponse> {
+    return this.request(`undelete_expense/${id}`, "POST");
   }
 
   // Comments
-  async getComments<T>(expense_id: number): Promise<T> {
+  async getComments(expense_id: number): Promise<types.GetCommentsResponse> {
     const endpoint = "get_comments?" + this.buildQueryString({ expense_id });
-    return this.request<T>(endpoint, "GET");
+    return this.request(endpoint, "GET");
   }
 
-  async createComment<T>(body: {
+  async createComment(body: {
     expense_id?: number;
     content?: string;
-  }): Promise<T> {
-    return this.request<T>("create_comment", "POST", body);
+  }): Promise<types.CreateCommentResponse> {
+    return this.request("create_comment", "POST", body);
   }
 
-  async deleteComment<T>(id: number): Promise<T> {
-    return this.request<T>(`delete_comment/${id}`, "POST");
+  async deleteComment(id: number): Promise<types.DeleteCommentResponse> {
+    return this.request(`delete_comment/${id}`, "POST");
   }
 
   // Notifications
-  async getNotifications<T>(queryParams?: {
+  async getNotifications(queryParams?: {
     updated_after?: string;
     limit?: number;
-  }): Promise<T> {
+  }): Promise<types.GetNotificationsResponse> {
     let endpoint = "get_notifications";
     if (queryParams && Object.keys(queryParams).length > 0) {
       endpoint += "?" + this.buildQueryString(queryParams);
     }
-    return this.request<T>(endpoint, "GET");
+    return this.request(endpoint, "GET");
   }
 
   // Categories
-  async getCategories<T>(): Promise<T> {
-    return this.request<T>("get_categories", "GET");
+  async getCategories(): Promise<types.GetCategoriesResponse> {
+    return this.request("get_categories", "GET");
   }
 }
