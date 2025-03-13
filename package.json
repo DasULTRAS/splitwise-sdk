@@ -27,12 +27,6 @@
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
     "@semantic-release/npm",
-    [
-      "@semantic-release/git",
-      {
-        "message": "chore(release): ${nextRelease.version} \n\n${nextRelease.notes}"
-      }
-    ],
     "@semantic-release/github"
   ],
   "dependencies": {
@@ -42,7 +36,6 @@
   "devDependencies": {
     "@eslint/js": "^9.22.0",
     "@semantic-release/commit-analyzer": "^13.0.1",
-    "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^11.0.1",
     "@semantic-release/npm": "^12.0.1",
     "@semantic-release/release-notes-generator": "^14.0.3",

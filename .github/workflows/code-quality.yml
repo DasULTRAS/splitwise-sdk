@@ -1,0 +1,56 @@
+name: Code Quality & Semantic Release Check
+
+on:
+  pull_request:
+    branches:
+      - main # Passe dies an, wenn du auf anderen Branches testen möchtest
+
+jobs:
+  code-quality:
+    name: Code Quality & Build Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🔧 Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: 📦 Install Dependencies
+        run: npm ci
+
+      - name: 🔍 Lint Code with ESLint
+        run: npm run lint
+
+      - name: 🔨 Build TypeScript Project
+        run: npm run build
+
+  semantic-release-check:
+    name: Semantic Release Dry Run
+    runs-on: ubuntu-latest
+    needs: code-quality
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Notwendig für `semantic-release`, um alle Tags zu holen
+
+      - name: 🔧 Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: 📦 Install Dependencies
+        run: npm ci
+
+      - name: 🔍 Dry-Run Semantic Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npx semantic-release --dry-run
