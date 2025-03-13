@@ -1,9 +1,11 @@
-# Ignore all
-*
+.github/
+.gitignore
 
-# Include necessary files
-!dist
-!dist/**
-!package.json
-!README.md
-!LICENSE
+.vscode/
+
+node_modules/
+src/
+
+eslint.config.mjs
+package-lock.json
+tsconfig.json
