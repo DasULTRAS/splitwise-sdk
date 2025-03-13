@@ -1,6 +1,9 @@
 name: Release
 on:
-  push:
+  workflow_run:
+    workflows: ["Code-Quality"]
+    types:
+      - completed
     branches:
       - main
 
@@ -8,9 +11,16 @@ permissions:
   contents: read # for checkout
 
 jobs:
+  on-success:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - run: echo "First workflow was a success"
+
   release:
     name: Release
     runs-on: ubuntu-latest
+    needs: on-success
     permissions:
       contents: write # to be able to publish a GitHub release
       issues: write # to be able to comment on released issues
@@ -26,7 +36,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "lts/*"
+          node-version: 20
+          cache: "npm"
 
       - name: Install dependencies
         run: npm clean-install
