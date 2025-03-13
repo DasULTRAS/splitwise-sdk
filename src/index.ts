@@ -1,20 +1,21 @@
-import { OAuth2 } from "oauth";
+import { API_URL, HTTP_VERBS } from "@/constants";
+import { getLogger, LOG_LEVELS } from "@/logger";
 import SplitwiseOptions from "@/types/SplitwiseOptions";
 import * as types from "@/types/api";
+import { OAuth2 } from "oauth";
 
 export class SplitwiseClient {
   private consumerKey?: string;
   private consumerSecret?: string;
   private accessToken?: string;
   private oauth2?: OAuth2;
-  private readonly apiUrl = "https://secure.splitwise.com/api/v3.0/";
   private logger: (message: string) => void;
 
   constructor(options: SplitwiseOptions) {
     this.consumerKey = options.consumerKey;
     this.consumerSecret = options.consumerSecret;
     this.accessToken = options.accessToken;
-    this.logger = options.logger || console.log;
+    this.logger = getLogger(options.logger, LOG_LEVELS.INFO);
 
     // OAuth2-Instanz initialisieren, falls consumerKey und consumerSecret vorhanden sind.
     if (this.consumerKey && this.consumerSecret) {
@@ -29,8 +30,9 @@ export class SplitwiseClient {
     }
   }
 
-  private log(level: "info" | "error", message: string): void {
-    this.logger(`[${level.toUpperCase()}] ${message}`);
+  private log(level: LOG_LEVELS, message: string): void {
+    if (process.env.NODE_ENV === "development" || level !== LOG_LEVELS.DEBUG)
+      this.logger(`[${level.toUpperCase()}] ${message}`);
   }
 
   /**
@@ -60,7 +62,7 @@ export class SplitwiseClient {
       );
     }
 
-    this.log("info", "Access Token wird abgerufen...");
+    this.log(LOG_LEVELS.DEBUG, "Access Token wird abgerufen...");
     // Eigener Promise-Wrapper, um den callback-basierten Aufruf zu behandeln
     const token: string = await new Promise((resolve, reject) => {
       this.oauth2!.getOAuthAccessToken(
@@ -84,7 +86,7 @@ export class SplitwiseClient {
       throw new Error("Kein Access Token in der Antwort enthalten.");
     }
     this.accessToken = token;
-    this.log("info", "Access Token erfolgreich abgerufen.");
+    this.log(LOG_LEVELS.DEBUG, "Access Token erfolgreich abgerufen.");
     return token;
   }
 
@@ -93,17 +95,20 @@ export class SplitwiseClient {
    */
   async request<T>(
     endpoint: string,
-    method: "GET" | "POST" = "GET",
+    method: HTTP_VERBS.GET | HTTP_VERBS.POST = HTTP_VERBS.GET,
     body?: unknown
   ): Promise<T> {
     const token = await this.fetchAccessToken();
-    const url = `${this.apiUrl}${endpoint}`;
+    const url = `${API_URL}${endpoint}`;
     const headers: Record<string, string> = {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     };
 
-    this.log("info", `Anfrage an ${url} (Methode: ${method}) wird ausgeführt.`);
+    this.log(
+      LOG_LEVELS.INFO,
+      `Anfrage an ${url} (Methode: ${method}) wird ausgeführt.`
+    );
     const response = await fetch(url, {
       method,
       headers,
@@ -122,89 +127,89 @@ export class SplitwiseClient {
 
   // Users
   async getCurrentUser(): Promise<types.GetCurrentUserResponse> {
-    return this.request("get_current_user", "GET");
+    return this.request("get_current_user", HTTP_VERBS.GET);
   }
 
   async getUser(id: number): Promise<types.GetUserResponse> {
-    return this.request(`get_user/${id}`, "GET");
+    return this.request(`get_user/${id}`, HTTP_VERBS.GET);
   }
 
   async updateUser(
     id: number,
     body: types.UpdateUserRequest
   ): Promise<types.UpdateUserResponse> {
-    return this.request(`update_user/${id}`, "POST", body);
+    return this.request(`update_user/${id}`, HTTP_VERBS.POST, body);
   }
 
   // Groups
   async getGroups(): Promise<types.GetGroupResponse> {
-    return this.request("get_groups", "GET");
+    return this.request("get_groups", HTTP_VERBS.GET);
   }
 
   async getGroup(id: number): Promise<types.GetGroupResponse> {
-    return this.request(`get_group/${id}`, "GET");
+    return this.request(`get_group/${id}`, HTTP_VERBS.GET);
   }
 
   async createGroup(
     body: types.CreateGroupRequest
   ): Promise<types.CreateGroupResponse> {
-    return this.request("create_group", "POST", body);
+    return this.request("create_group", HTTP_VERBS.POST, body);
   }
 
   async deleteGroup(id: number): Promise<types.DeleteGroupResponse> {
-    return this.request(`delete_group/${id}`, "POST");
+    return this.request(`delete_group/${id}`, HTTP_VERBS.POST);
   }
 
   async undeleteGroup(id: number): Promise<types.UndeleteGroupResponse> {
-    return this.request(`undelete_group/${id}`, "POST");
+    return this.request(`undelete_group/${id}`, HTTP_VERBS.POST);
   }
 
   async addUserToGroup(
     body: types.AddUserToGroupRequest
   ): Promise<types.AddUserToGroupResponse> {
-    return this.request("add_user_to_group", "POST", body);
+    return this.request("add_user_to_group", HTTP_VERBS.POST, body);
   }
 
   async removeUserFromGroup(body: {
     group_id: number;
     user_id: number;
   }): Promise<types.RemoveUserFromGroupResponse> {
-    return this.request("remove_user_from_group", "POST", body);
+    return this.request("remove_user_from_group", HTTP_VERBS.POST, body);
   }
 
   // Friends
   async getFriends(): Promise<types.GetFriendsResponse> {
-    return this.request("get_friends", "GET");
+    return this.request("get_friends", HTTP_VERBS.GET);
   }
 
   async getFriend(id: number): Promise<types.GetFriendResponse> {
-    return this.request(`get_friend/${id}`, "GET");
+    return this.request(`get_friend/${id}`, HTTP_VERBS.GET);
   }
 
   async createFriend(
     body: types.CreateFriendRequest
   ): Promise<types.CreateFriendResponse> {
-    return this.request("create_friend", "POST", body);
+    return this.request("create_friend", HTTP_VERBS.POST, body);
   }
 
   async createFriends(
     body: types.CreateFriendsResponse
   ): Promise<types.CreateFriendsResponse> {
-    return this.request("create_friends", "POST", body);
+    return this.request("create_friends", HTTP_VERBS.POST, body);
   }
 
   async deleteFriend(id: number): Promise<types.DeleteFriendResponse> {
-    return this.request(`delete_friend/${id}`, "POST");
+    return this.request(`delete_friend/${id}`, HTTP_VERBS.POST);
   }
 
   // Currencies
   async getCurrencies(): Promise<types.GetCurrenciesResponse> {
-    return this.request("get_currencies", "GET");
+    return this.request("get_currencies", HTTP_VERBS.GET);
   }
 
   // Expenses
   async getExpense(id: number): Promise<types.GetExpenseResponse> {
-    return this.request(`get_expense/${id}`, "GET");
+    return this.request(`get_expense/${id}`, HTTP_VERBS.GET);
   }
 
   async getExpenses(
@@ -214,46 +219,46 @@ export class SplitwiseClient {
     if (queryParams && Object.keys(queryParams).length > 0) {
       endpoint += "?" + this.buildQueryString(queryParams);
     }
-    return this.request(endpoint, "GET");
+    return this.request(endpoint, HTTP_VERBS.GET);
   }
 
   async createExpense(
     body: types.CreateExpenseRequest
   ): Promise<types.CreateExpenseResponse> {
     // body kann entweder vom Typ "equal_group_split" oder "by_shares" sein
-    return this.request("create_expense", "POST", body);
+    return this.request("create_expense", HTTP_VERBS.POST, body);
   }
 
   async updateExpense(
     id: number,
     body: types.UpdateExpenseRequest
   ): Promise<types.UpdateExpenseResponse> {
-    return this.request(`update_expense/${id}`, "POST", body);
+    return this.request(`update_expense/${id}`, HTTP_VERBS.POST, body);
   }
 
   async deleteExpense(id: number): Promise<types.DeleteExpenseResponse> {
-    return this.request(`delete_expense/${id}`, "POST");
+    return this.request(`delete_expense/${id}`, HTTP_VERBS.POST);
   }
 
   async undeleteExpense(id: number): Promise<types.UndeleteExpenseResponse> {
-    return this.request(`undelete_expense/${id}`, "POST");
+    return this.request(`undelete_expense/${id}`, HTTP_VERBS.POST);
   }
 
   // Comments
   async getComments(expense_id: number): Promise<types.GetCommentsResponse> {
     const endpoint = "get_comments?" + this.buildQueryString({ expense_id });
-    return this.request(endpoint, "GET");
+    return this.request(endpoint, HTTP_VERBS.GET);
   }
 
   async createComment(body: {
     expense_id?: number;
     content?: string;
   }): Promise<types.CreateCommentResponse> {
-    return this.request("create_comment", "POST", body);
+    return this.request("create_comment", HTTP_VERBS.POST, body);
   }
 
   async deleteComment(id: number): Promise<types.DeleteCommentResponse> {
-    return this.request(`delete_comment/${id}`, "POST");
+    return this.request(`delete_comment/${id}`, HTTP_VERBS.POST);
   }
 
   // Notifications
@@ -265,11 +270,11 @@ export class SplitwiseClient {
     if (queryParams && Object.keys(queryParams).length > 0) {
       endpoint += "?" + this.buildQueryString(queryParams);
     }
-    return this.request(endpoint, "GET");
+    return this.request(endpoint, HTTP_VERBS.GET);
   }
 
   // Categories
   async getCategories(): Promise<types.GetCategoriesResponse> {
-    return this.request("get_categories", "GET");
+    return this.request("get_categories", HTTP_VERBS.GET);
   }
 }
