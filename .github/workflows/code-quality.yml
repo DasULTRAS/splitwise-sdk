@@ -1,9 +1,12 @@
-name: Code Quality & Semantic Release Check
+name: Code-Quality
 
 on:
   pull_request:
     branches:
       - main # Passe dies an, wenn du auf anderen Branches testen möchtest
+  push:
+    branches:
+      - main
 
 jobs:
   code-quality:
