@@ -2,7 +2,8 @@
 *
 
 # Include necessary files
-!dist/
+!dist
+!dist/**
 !package.json
 !README.md
 !LICENSE
