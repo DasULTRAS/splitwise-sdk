@@ -1,8 +1,8 @@
-import { API_URL, HTTP_VERBS } from "@/constants";
 import { getLogger, LOG_LEVELS } from "@/logger";
 import SplitwiseOptions from "@/types/SplitwiseOptions";
 import * as types from "@/types/api";
 import { OAuth2 } from "oauth";
+import { API_URL, HTTP_VERBS } from "./constants";
 
 export class SplitwiseClient {
   private consumerKey?: string;
