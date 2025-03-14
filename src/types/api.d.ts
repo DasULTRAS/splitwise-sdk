@@ -1,4 +1,4 @@
-import { paths } from "@/openapi-types";
+import { paths } from "./openapi-types";
 
 // Users
 export type GetCurrentUserResponse =
