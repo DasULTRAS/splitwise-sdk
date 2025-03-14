@@ -1,6 +1,6 @@
 {
   "name": "splitwise-sdk",
-  "version": "1.3.3",
+  "version": "1.3.2",
   "description": "Splitwise API SDK for Node.js",
   "repository": {
     "type": "git",
