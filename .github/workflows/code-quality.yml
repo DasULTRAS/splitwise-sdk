@@ -26,6 +26,9 @@ jobs:
       - name: 📦 Install Dependencies
         run: npm ci
 
+      - name: Running typecheck
+        run: npx tsc --noEmit
+
       - name: 🔍 Lint Code with ESLint
         run: npm run lint
 
