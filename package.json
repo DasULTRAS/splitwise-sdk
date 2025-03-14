@@ -30,7 +30,6 @@
     "@semantic-release/github"
   ],
   "dependencies": {
-    "es6-promisify": "^7.0.0",
     "oauth": "^0.10.2"
   },
   "devDependencies": {
@@ -39,7 +38,6 @@
     "@semantic-release/github": "^11.0.1",
     "@semantic-release/npm": "^12.0.1",
     "@semantic-release/release-notes-generator": "^14.0.3",
-    "@types/es6-promisify": "^6.0.4",
     "@types/node": "^22.13.10",
     "@types/oauth": "^0.9.6",
     "eslint": "^9.22.0",
