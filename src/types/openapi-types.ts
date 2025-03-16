@@ -1459,22 +1459,22 @@ export interface components {
         ForbiddenError: components["schemas"]["forbidden"];
         NotFoundError: components["schemas"]["not_found"];
         user: {
-            id?: number;
+            id: number;
             /** @example Ada */
-            first_name?: string;
+            first_name: string;
             /** @example Lovelace */
             last_name?: string | null;
             /** @example ada@example.com */
-            email?: string;
+            email: string;
             /** @enum {string} */
-            registration_status?: "confirmed" | "dummy" | "invited";
-            picture?: {
-                small?: string;
-                medium?: string;
-                large?: string;
+            registration_status: "confirmed" | "dummy" | "invited";
+            picture: {
+                small: string;
+                medium: string;
+                large: string;
             };
             /** @example false */
-            custom_picture?: boolean;
+            custom_picture: boolean;
         };
         /**
          * @description User's notification preferences
@@ -1490,33 +1490,33 @@ export interface components {
              * @description ISO 8601 date/time indicating the last time notifications were read
              * @example 2017-06-02T20:21:57Z
              */
-            notifications_read?: string;
+            notifications_read: string;
             /**
              * @description Number of unread notifications since notifiations_read
              * @example 12
              */
-            notifications_count?: number;
-            notifications?: components["schemas"]["notification_settings"];
+            notifications_count: number;
+            notifications: components["schemas"]["notification_settings"];
             /** @example USD */
-            default_currency?: string;
+            default_currency: string;
             /**
              * @description ISO_639-1 2-letter locale code
              * @example en
              */
-            locale?: string;
+            locale: string;
         };
         unauthorized: {
             /** @example Invalid API request: you are not logged in */
-            error?: string;
+            error: string;
         };
         forbidden: {
-            errors?: {
-                base?: string[];
+            errors: {
+                base: string[];
             };
         };
         not_found: {
-            errors?: {
-                base?: string[];
+            errors: {
+                base: string[];
             };
         };
         debt: {
@@ -1524,22 +1524,22 @@ export interface components {
              * @description User ID
              * @example 18523
              */
-            from?: number;
+            from: number;
             /**
              * @description User ID
              * @example 90261
              */
-            to?: number;
+            to: number;
             /** @example 414.5 */
-            amount?: string;
+            amount: string;
             /** @example USD */
-            currency_code?: string;
+            currency_code: string;
         };
         group: {
             /** @example 321 */
-            id?: number;
+            id: number;
             /** @example Housemates 2020 */
-            name?: string;
+            name: string;
             /**
              * @description What is the group used for?
              *
@@ -1548,11 +1548,11 @@ export interface components {
              * @example home
              * @enum {string}
              */
-            group_type?: "home" | "trip" | "couple" | "other" | "apartment" | "house";
+            group_type: "home" | "trip" | "couple" | "other" | "apartment" | "house";
             /** Format: date-time */
-            updated_at?: string;
-            simplify_by_default?: boolean;
-            members?: (components["schemas"]["user"] & {
+            updated_at: string;
+            simplify_by_default: boolean;
+            members: (components["schemas"]["user"] & {
                 balance?: {
                     /** @example USD */
                     currency_code?: string;
@@ -1560,62 +1560,62 @@ export interface components {
                     amount?: string;
                 }[];
             })[];
-            original_debts?: components["schemas"]["debt"][];
-            simplified_debts?: components["schemas"]["debt"][];
-            avatar?: {
+            original_debts: components["schemas"]["debt"][];
+            simplified_debts: components["schemas"]["debt"][];
+            avatar: {
                 /** @example null */
                 original?: string | null;
                 /** @example https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby2-house-1000px.png */
-                xxlarge?: string;
+                xxlarge: string;
                 /** @example https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby2-house-500px.png */
-                xlarge?: string;
+                xlarge: string;
                 /** @example https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby2-house-200px.png */
-                large?: string;
+                large: string;
                 /** @example https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby2-house-100px.png */
-                medium?: string;
+                medium: string;
                 /** @example https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby2-house-50px.png */
-                small?: string;
+                small: string;
             };
-            custom_avatar?: boolean;
-            cover_photo?: {
+            custom_avatar: boolean;
+            cover_photo: {
                 /** @example https://s3.amazonaws.com/splitwise/uploads/group/default_cover_photos/coverphoto-ruby-1000px.png */
-                xxlarge?: string;
+                xxlarge: string;
                 /** @example https://s3.amazonaws.com/splitwise/uploads/group/default_cover_photos/coverphoto-ruby-500px.png */
-                xlarge?: string;
+                xlarge: string;
             };
             /**
              * @description A link the user can send to a friend to join the group directly
              * @example https://www.splitwise.com/join/abQwErTyuI+12
              */
-            invite_link?: string;
+            invite_link: string;
         };
         balance: {
             /** @example USD */
-            currency_code?: string;
+            currency_code: string;
             /** @example 414.5 */
-            amount?: string;
+            amount: string;
         };
         friend: components["schemas"]["user"] & {
-            groups?: {
+            groups: {
                 /** @example 571 */
                 group_id?: number;
                 balance?: components["schemas"]["balance"][];
             }[];
-            balance?: components["schemas"]["balance"][];
+            balance: components["schemas"]["balance"][];
             /** Format: date-time */
-            updated_at?: string;
+            updated_at: string;
         };
         common: {
             /**
              * @description A string representation of a decimal value, limited to 2 decimal places
              * @example 25
              */
-            cost?: string;
+            cost: string;
             /**
              * @description A short description of the expense
              * @example Grocery run
              */
-            description?: string;
+            description: string;
             /** @description Also known as "notes." */
             details?: string | null;
             /**
@@ -1623,69 +1623,69 @@ export interface components {
              * @description The date and time the expense took place. May differ from `created_at`
              * @example 2012-05-02T13:00:00Z
              */
-            date?: string;
+            date: string;
             /** @enum {string} */
-            repeat_interval?: "never" | "weekly" | "fortnightly" | "monthly" | "yearly";
+            repeat_interval: "never" | "weekly" | "fortnightly" | "monthly" | "yearly";
             /**
              * @description A currency code. Must be in the list from `get_currencies`
              * @example USD
              */
-            currency_code?: string;
+            currency_code: string;
             /**
              * @description A category id from `get_categories`
              * @example 15
              */
-            category_id?: number;
+            category_id: number;
         };
         comment_user: {
             /** @example 491923 */
-            id?: number;
+            id: number;
             /** @example Jane */
-            first_name?: string;
+            first_name: string;
             /** @example Doe */
-            last_name?: string;
-            picture?: {
+            last_name: string;
+            picture: {
                 /** @example image_url */
-                medium?: string;
+                medium: string;
             };
         };
         share: {
-            user?: components["schemas"]["comment_user"];
+            user: components["schemas"]["comment_user"];
             /** @example 491923 */
-            user_id?: number;
+            user_id: number;
             /** @example 8.99 */
-            paid_share?: string;
+            paid_share: string;
             /** @example 4.5 */
-            owed_share?: string;
+            owed_share: string;
             /** @example 4.49 */
-            net_balance?: string;
+            net_balance: string;
         };
         comment: {
             /** @example 79800950 */
-            id?: number;
+            id: number;
             /** @example John D. updated this transaction: - The cost changed from $6.99 to $8.99 */
-            content?: string;
+            content: string;
             /** @enum {string} */
-            comment_type?: "System" | "User";
+            comment_type: "System" | "User";
             /** @enum {string} */
-            relation_type?: "ExpenseComment";
+            relation_type: "ExpenseComment";
             /**
              * @description ID of the subject of the comment
              * @example 855870953
              */
-            relation_id?: number;
+            relation_id: number;
             /** Format: date-time */
-            created_at?: string;
+            created_at: string;
             /** Format: date-time */
             deleted_at?: string | null;
-            user?: components["schemas"]["comment_user"];
+            user: components["schemas"]["comment_user"];
         };
         expense: components["schemas"]["common"] & {
             /**
              * Format: int64
              * @example 51023
              */
-            id?: number;
+            id: number;
             /**
              * @description Null if the expense is not associated with a group.
              * @example 391
@@ -1699,15 +1699,15 @@ export interface components {
             /** @example 491030 */
             expense_bundle_id?: number | null;
             /** @example Brunch */
-            description?: string;
+            description: string;
             /** @description Whether the expense recurs automatically */
-            repeats?: boolean;
+            repeats: boolean;
             /** @enum {string} */
-            repeat_interval?: "never" | "weekly" | "fortnightly" | "monthly" | "yearly";
+            repeat_interval: "never" | "weekly" | "fortnightly" | "monthly" | "yearly";
             /** @description Whether a reminder will be sent to involved users in advance of the next occurrence of a recurring expense.
              *     Only applicable if the expense recurs.
              *      */
-            email_reminder?: boolean;
+            email_reminder: boolean;
             /**
              * @description Number of days in advance to remind involved users about the next occurrence of a new expense.
              *     Only applicable if the expense recurs.
@@ -1719,16 +1719,16 @@ export interface components {
             next_repeat?: string | null;
             /** @description Also known as "notes." */
             details?: string | null;
-            comments_count?: number;
+            comments_count: number;
             /** @description Whether this was a payment between users */
-            payment?: boolean;
+            payment: boolean;
             /** @description If a payment was made via an integrated third party service, whether it was confirmed by that service. */
-            transaction_confirmed?: boolean;
+            transaction_confirmed: boolean;
             /** @example 25.0 */
-            cost?: string;
+            cost: string;
             /** @example USD */
-            currency_code?: string;
-            repayments?: {
+            currency_code: string;
+            repayments: {
                 /**
                  * @description ID of the owing user
                  * @example 6788709
@@ -1747,136 +1747,136 @@ export interface components {
              * @description The date and time the expense took place. May differ from `created_at`
              * @example 2012-05-02T13:00:00Z
              */
-            date?: string;
+            date: string;
             /**
              * Format: date-time
              * @description The date and time the expense was created on Splitwise
              * @example 2012-07-27T06:17:09Z
              */
-            created_at?: string;
-            created_by?: components["schemas"]["user"] & unknown;
+            created_at: string;
+            created_by: components["schemas"]["user"] & unknown;
             /**
              * Format: date-time
              * @description The last time the expense was updated.
              * @example 2012-12-23T05:47:02Z
              */
-            updated_at?: string;
-            updated_by?: components["schemas"]["user"] & unknown;
+            updated_at: string;
+            updated_by: components["schemas"]["user"] & unknown;
             /**
              * Format: date-time
              * @description If the expense was deleted, when it was deleted.
              * @example 2012-12-23T05:47:02Z
              */
             deleted_at?: string | null;
-            deleted_by?: components["schemas"]["user"] & unknown;
-            category?: {
+            deleted_by: components["schemas"]["user"] & unknown;
+            category: {
                 /** @example 5 */
-                id?: number;
+                id: number;
                 /**
                  * @description Translated to the current user's locale
                  * @example Electricity
                  */
-                name?: string;
+                name: string;
             };
-            receipt?: {
+            receipt: {
                 /** @example https://splitwise.s3.amazonaws.com/uploads/expense/receipt/3678899/large_95f8ecd1-536b-44ce-ad9b-0a9498bb7cf0.png */
                 large?: string | null;
                 /** @example https://splitwise.s3.amazonaws.com/uploads/expense/receipt/3678899/95f8ecd1-536b-44ce-ad9b-0a9498bb7cf0.png */
                 original?: string | null;
             };
-            users?: components["schemas"]["share"][];
-            comments?: components["schemas"]["comment"][];
+            users: components["schemas"]["share"][];
+            comments: components["schemas"]["comment"][];
         };
         equal_group_split: components["schemas"]["common"] & {
             /** @description The group to put this expense in. */
-            group_id?: number;
+            group_id: number;
             /** @enum {boolean} */
-            split_equally?: true;
+            split_equally: true;
         } & unknown;
         by_shares: components["schemas"]["common"] & ({
             /** @description The group to put this expense in, or `0` to create an expense outside of a group. */
-            group_id?: number;
+            group_id: number;
             /** @example 54123 */
-            users__0__user_id?: number;
+            users__0__user_id: number;
             /**
              * @description Decimal amount as a string with 2 decimal places. The amount this user paid for the expense
              * @example 25
              */
-            users__0__paid_share?: string;
+            users__0__paid_share: string;
             /**
              * @description Decimal amount as a string with 2 decimal places. The amount this user owes for the expense
              * @example 13.55
              */
-            users__0__owed_share?: string;
+            users__0__owed_share: string;
             /** @example Neu */
-            users__1__first_name?: string;
+            users__1__first_name: string;
             /** @example Yewzer */
-            users__1__last_name?: string;
+            users__1__last_name: string;
             /** @example neuyewxyz@example.com */
-            users__1__email?: string;
+            users__1__email: string;
             /**
              * @description Decimal amount as a string with 2 decimal places. The amount this user paid for the expense
              * @example 0
              */
-            users__1__paid_share?: string;
+            users__1__paid_share: string;
             /**
              * @description Decimal amount as a string with 2 decimal places. The amount this user owes for the expense
              * @example 11.45
              */
-            users__1__owed_share?: string;
+            users__1__owed_share: string;
         } & {
             [key: string]: string;
         }) & unknown;
         notification: {
             /** @example 32514315 */
-            id?: number;
-            type?: number;
+            id: number;
+            type: number;
             /** Format: date-time */
-            created_at?: string;
+            created_at: string;
             /** @example 2 */
-            created_by?: number;
+            created_by: number;
             source?: {
                 /** @example Expense */
-                type?: string;
+                type: string;
                 /** @example 865077 */
-                id?: number;
+                id: number;
                 url?: string | null;
             } | null;
             /** @example https://s3.amazonaws.com/splitwise/uploads/notifications/v2/0-venmo.png */
-            image_url?: string;
+            image_url: string;
             /** @enum {string} */
-            image_shape?: "square" | "circle";
+            image_shape: "square" | "circle";
             /** @example <strong>You</strong> paid <strong>Jon H.</strong>.<br><font color=\"#5bc5a7\">You paid $23.45</font> */
-            content?: string;
+            content: string;
         };
         category: {
             /** @example 48 */
-            id?: number;
+            id: number;
             /** @example Cleaning */
-            name?: string;
+            name: string;
             /** @example https://s3.amazonaws.com/splitwise/uploads/category/icon/square/utilities/cleaning.png */
-            icon?: string;
-            icon_types?: {
-                slim?: {
+            icon: string;
+            icon_types: {
+                slim: {
                     /** Format: uri */
-                    small?: string;
+                    small: string;
                     /** Format: uri */
-                    large?: string;
+                    large: string;
                 };
-                square?: {
+                square: {
                     /** Format: uri */
-                    large?: string;
+                    large: string;
                     /** Format: uri */
-                    xlarge?: string;
+                    xlarge: string;
                 };
             };
         };
         parent_category: components["schemas"]["category"] & {
             /** @example 1 */
-            id?: unknown;
+            id: unknown;
             /** @example Utilities */
-            name?: unknown;
-            subcategories?: components["schemas"]["category"][];
+            name: unknown;
+            subcategories: components["schemas"]["category"][];
         };
     };
     responses: {

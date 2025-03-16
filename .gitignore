@@ -1,2 +1,8 @@
+# Build files
 dist/
+
+# Dependency directory
 node_modules/
+
+# Generated files
+openapi_updated.json
