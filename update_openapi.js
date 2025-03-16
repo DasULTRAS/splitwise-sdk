@@ -1,8 +1,8 @@
-const fs = require("fs");
+import { readFileSync, writeFileSync } from "fs";
 
 // Lade die OpenAPI JSON-Datei
 const openApiPath = "openapi.json";
-const openApiData = JSON.parse(fs.readFileSync(openApiPath, "utf-8"));
+const openApiData = JSON.parse(readFileSync(openApiPath, "utf-8"));
 
 function addRequiredFields(schema) {
   if (schema.type === "object" && schema.properties) {
@@ -35,7 +35,7 @@ if (openApiData.components && openApiData.components.schemas) {
   });
 
   // Speichere die geänderte OpenAPI JSON-Datei
-  fs.writeFileSync(
+  writeFileSync(
     "openapi_updated.json",
     JSON.stringify(openApiData, null, 2),
     "utf-8"
