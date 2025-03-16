@@ -41,12 +41,27 @@ Weitere Details zu den Parametern und Rückgabetypen findest du in der OpenAPI�
 
 ### **Typen aus OpenAPI generieren (optional)**
 
-Falls du automatische Typdefinitionen aus der OpenAPI-Datei erstellen möchtest, kannst du das Tool [openapi-typescript](https://github.com/drwpow/openapi-typescript) verwenden. Dies hilft, eine konsistente Typensicherheit für API-Aufrufe in TypeScript zu gewährleisten.  
-Führe dazu den folgenden Befehl aus:
+Falls du automatische Typdefinitionen aus der OpenAPI-Datei erstellen möchtest, kannst du das Tool [openapi-typescript](https://github.com/drwpow/openapi-typescript) verwenden.
+
+#### **Schritt 1: OpenAPI-Schema korrigieren (Optionale Felder entfernen)**
+
+Da OpenAPI oft alle Felder als optional definiert, stellen wir sicher, dass `required`-Felder korrekt gesetzt werden, indem wir unser Skript ausführen:
 
 ```bash
-npx openapi-typescript openapi.json --output src/api-types.d.ts
+node update_openapi.js
 ```
+
+Dadurch wird die Datei `api.json` aktualisiert und als `api_updated.json` gespeichert.
+
+#### **Schritt 2: OpenAPI in TypeScript-Typen umwandeln**
+
+Nun können wir aus der bereinigten OpenAPI-Datei TypeScript-Typen generieren:
+
+```bash
+npx openapi-typescript api_updated.json --output src/types/openapi-types.ts
+```
+
+Das erzeugt eine Datei `openapi-types.ts`, die die Schnittstellen für deine API enthält.
 
 ### **Lokale Entwicklung**
 
