@@ -1,4 +1,4 @@
-import { paths } from "./openapi-types";
+import { components, paths } from "./openapi-types";
 
 // Users
 export type GetCurrentUserResponse =
@@ -17,8 +17,12 @@ export type GetGroupResponse =
   paths["/get_group/{id}"]["get"]["responses"]["200"]["content"]["application/json"];
 export type CreateGroupRequest =
   paths["/create_group"]["post"]["requestBody"]["content"]["application/json"];
-export type CreateGroupResponse =
-  paths["/create_group"]["post"]["responses"]["200"]["content"]["application/json"];
+// paths["/create_group"]["post"]["responses"]["200"]["content"]["application/json"];
+export interface CreateGroupResponse {
+  group?: components["schemas"]["group"];
+  errors?: paths["/create_group"]["post"]["responses"]["400"]["content"]["application/json"]["errors"];
+}
+
 export type DeleteGroupResponse =
   paths["/delete_group/{id}"]["post"]["responses"]["200"]["content"]["application/json"];
 export type UndeleteGroupResponse =
@@ -57,8 +61,11 @@ export type GetExpensesResponse =
   paths["/get_expenses"]["get"]["responses"]["200"]["content"]["application/json"];
 export type CreateExpenseRequest =
   paths["/create_expense"]["post"]["requestBody"]["content"]["application/json"];
-export type CreateExpenseResponse =
-  paths["/create_expense"]["post"]["responses"]["200"]["content"]["application/json"];
+export interface CreateExpenseResponse {
+  expenses?: components["schemas"]["expense"][];
+  errors?: paths["/create_expense"]["post"]["responses"]["400"]["content"]["application/json"]["errors"];
+};
+
 export type UpdateExpenseRequest =
   paths["/update_expense/{id}"]["post"]["requestBody"]["content"]["application/json"];
 export type UpdateExpenseResponse =
