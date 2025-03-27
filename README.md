@@ -39,6 +39,13 @@ Weitere Details zu den Parametern und Rückgabetypen findest du in der OpenAPI�
 
 ## **Entwicklung**
 
+### Semantic Commits
+
+Dieses Projekt verwendet **semantic-release** in Kombination mit **@semantic-release/commit-analyzer**.  
+Daher müssen alle Commits einem bestimmten [Format](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines) folgen und einen gültigen [Typ](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#type) enthalten.
+
+Wenn du magst, kann ich auch noch einen kurzen Beispiels-Commit oder weiterführende Hinweise ergänzen.
+
 ### **Typen aus OpenAPI generieren (optional)**
 
 Falls du automatische Typdefinitionen aus der OpenAPI-Datei erstellen möchtest, kannst du das Tool [openapi-typescript](https://github.com/drwpow/openapi-typescript) verwenden.
