@@ -48,10 +48,23 @@ jobs:
       - name: Build TypeScript Project
         run: npm run build
 
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup
+
+      - name: Run Tests & Check Coverage
+        run: npm test
+
   semantic-release-check:
     name: Semantic Release Dry Run
     runs-on: ubuntu-latest
-    needs: [lint, typecheck, build]
+    needs: [lint, typecheck, build, test]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v6
