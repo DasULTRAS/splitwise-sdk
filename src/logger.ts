@@ -6,7 +6,7 @@ export enum LOG_LEVELS {
 
 export function getLogger(
   logger?: (message: string) => void,
-  level: LOG_LEVELS = LOG_LEVELS.INFO
+  level: LOG_LEVELS = LOG_LEVELS.INFO,
 ) {
   return (message: string) => {
     if (logger) {

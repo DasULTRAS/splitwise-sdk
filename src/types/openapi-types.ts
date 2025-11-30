@@ -4,1541 +4,259 @@
  */
 
 export interface paths {
-    "/get_current_user": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get information about the current user */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            user?: components["schemas"]["current_user"];
-                        };
-                    };
-                };
-                401: components["responses"]["unauthorized"];
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+  "/get_current_user": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/get_user/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
+    /** Get information about the current user */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              user?: components["schemas"]["current_user"];
             };
-            cookie?: never;
+          };
         };
-        /** Get information about another user */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            user?: components["schemas"]["user"];
-                        };
-                    };
-                };
-                401: components["responses"]["unauthorized"];
-                403: components["responses"]["forbidden"];
-                404: components["responses"]["not_found"];
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        401: components["responses"]["unauthorized"];
+      };
     };
-    "/update_user/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Update a user */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        first_name?: string;
-                        last_name?: string;
-                        email?: string;
-                        password?: string;
-                        locale?: string;
-                        default_currency?: string;
-                    };
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["user"];
-                    };
-                };
-                401: components["responses"]["unauthorized"];
-                403: components["responses"]["forbidden"];
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/get_user/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
     };
-    "/get_groups": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    /** Get information about another user */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: number;
         };
-        /**
-         * List the current user's groups
-         * @description **Note**: Expenses that are not associated with a group are listed in a group with ID 0.
-         *
-         */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              user?: components["schemas"]["user"];
             };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            groups?: components["schemas"]["group"][];
-                        };
-                    };
-                };
-                401: components["responses"]["unauthorized"];
-            };
+          };
         };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        401: components["responses"]["unauthorized"];
+        403: components["responses"]["forbidden"];
+        404: components["responses"]["not_found"];
+      };
     };
-    "/get_group/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        /** Get information about a group */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            group?: components["schemas"]["group"];
-                        };
-                    };
-                };
-                401: components["responses"]["unauthorized"];
-                403: components["responses"]["forbidden"];
-                404: components["responses"]["not_found"];
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/update_user/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
     };
-    "/create_group": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    get?: never;
+    put?: never;
+    /** Update a user */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: number;
         };
-        get?: never;
-        put?: never;
-        /**
-         * Create a group
-         * @description Creates a new group. Adds the current user to the group by default.
-         *
-         *     **Note**: group user parameters must be flattened into the format `users__{index}__{property}`, where
-         *     `property` is `user_id`, `first_name`, `last_name`, or `email`.
-         *     The user's email or ID must be provided.
-         *
-         */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        name: string;
-                        /**
-                         * @description What is the group used for?
-                         *
-                         *     **Note**: It is recommended to use `home` in place of `house` or `apartment`.
-                         *
-                         * @example home
-                         * @enum {string}
-                         */
-                        group_type?: "home" | "trip" | "couple" | "other" | "apartment" | "house";
-                        /** @description Turn on simplify debts? */
-                        simplify_by_default?: boolean;
-                    } & {
-                        [key: string]: string;
-                    };
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            group?: components["schemas"]["group"];
-                        };
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            errors?: {
-                                base?: string[];
-                            };
-                        };
-                    };
-                };
-            };
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": {
+            first_name?: string;
+            last_name?: string;
+            email?: string;
+            password?: string;
+            locale?: string;
+            default_currency?: string;
+          };
         };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["user"];
+          };
+        };
+        401: components["responses"]["unauthorized"];
+        403: components["responses"]["forbidden"];
+      };
     };
-    "/delete_group/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Delete a group
-         * @description Delete an existing group. Destroys all associated records (expenses, etc.)
-         */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            success?: boolean;
-                        };
-                    };
-                };
-                401: components["responses"]["unauthorized"];
-                403: components["responses"]["forbidden"];
-                404: components["responses"]["not_found"];
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/get_groups": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/undelete_group/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
+    /**
+     * List the current user's groups
+     * @description **Note**: Expenses that are not associated with a group are listed in a group with ID 0.
+     *
+     */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              groups?: components["schemas"]["group"][];
             };
-            cookie?: never;
+          };
         };
-        get?: never;
-        put?: never;
-        /**
-         * Restore a group
-         * @description Restores a deleted group.
-         *
-         *     **Note**: 200 OK does not indicate a successful response. You must check the `success` value of the response.
-         *
-         */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            success?: boolean;
-                            errors?: string[];
-                        };
-                    };
-                };
-                401: components["responses"]["unauthorized"];
-                403: components["responses"]["forbidden"];
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        401: components["responses"]["unauthorized"];
+      };
     };
-    "/add_user_to_group": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Add a user to a group
-         * @description **Note**: 200 OK does not indicate a successful response. You must check the `success` value of the response.
-         *
-         */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        /** @example 49012 */
-                        group_id?: number;
-                        /** @example 7999632 */
-                        user_id: number;
-                    } | {
-                        /** @example 49012 */
-                        group_id?: number;
-                        /** @example Grace */
-                        first_name: string;
-                        /** @example Hopper */
-                        last_name: string;
-                        /** @example gracehopper@example.com */
-                        email: string;
-                    };
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            success?: boolean;
-                            user?: components["schemas"]["user"];
-                            errors?: {
-                                [key: string]: string[];
-                            };
-                        };
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/get_group/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
     };
-    "/remove_user_from_group": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    /** Get information about a group */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: number;
         };
-        get?: never;
-        put?: never;
-        /**
-         * Remove a user from a group
-         * @description Remove a user from a group. Does not succeed if the user has a non-zero balance.
-         *
-         *     **Note:** 200 OK does not indicate a successful response. You must check the success value of the response.
-         *
-         */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              group?: components["schemas"]["group"];
             };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        /** @example 4012 */
-                        group_id: number;
-                        /** @example 940142 */
-                        user_id: number;
-                    };
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            success?: boolean;
-                            errors?: {
-                                [key: string]: string[];
-                            };
-                        };
-                    };
-                };
-            };
+          };
         };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        401: components["responses"]["unauthorized"];
+        403: components["responses"]["forbidden"];
+        404: components["responses"]["not_found"];
+      };
     };
-    "/get_friends": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * List current user's friends
-         * @description **Note**: `group` objects only include group balances with that friend.
-         *
-         */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            friends?: (components["schemas"]["friend"] & unknown)[];
-                        };
-                    };
-                };
-                401: components["responses"]["unauthorized"];
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/create_group": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/get_friend/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description User ID of the friend */
-                id: number;
-            };
-            cookie?: never;
-        };
-        /** Get details about a friend */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description User ID of the friend */
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            friend?: components["schemas"]["friend"];
-                        };
-                    };
-                };
-                401: components["responses"]["unauthorized"];
-                403: components["responses"]["forbidden"];
-                404: components["responses"]["not_found"];
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/create_friend": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Add a friend
-         * @description Adds a friend. If the other user does not exist, you must supply `user_first_name`.
-         *     If the other user exists, `user_first_name` and `user_last_name` will be ignored.
-         *
-         */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        /** @example ada@example.com */
-                        user_email?: string;
-                        /** @example Ada */
-                        user_first_name?: string;
-                        /** @example Lovelace */
-                        user_last_name?: string;
-                    };
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            friend?: components["schemas"]["friend"];
-                        };
-                    };
-                };
-                401: components["responses"]["unauthorized"];
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/create_friends": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Add friends
-         * @description Add multiple friends at once.
-         *
-         *     For each user, if the other user does not exist, you must supply `friends__{index}__first_name`.
-         *
-         *     **Note**: user parameters must be flattened into the format `friends__{index}__{property}`, where
-         *     `property` is `first_name`, `last_name`, or `email`.
-         *
-         */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    /** @example {
-                     *       "friends__0__first_name": "Alan",
-                     *       "friends__0__last_name": "Turing",
-                     *       "friends__0__email": "alan@example.org",
-                     *       "friends__1__email": "existing_user@example.com"
-                     *     } */
-                    "application/json": {
-                        [key: string]: string;
-                    };
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            users?: (components["schemas"]["friend"] & unknown)[];
-                            errors?: {
-                                [key: string]: string[];
-                            };
-                        };
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /** @example [] */
-                            users?: (components["schemas"]["friend"] & unknown)[];
-                            /** @example {
-                             *       "base": [
-                             *         "Please supply a name for this user"
-                             *       ]
-                             *     } */
-                            errors?: {
-                                [key: string]: string[];
-                            };
-                        };
-                    };
-                };
-                401: components["responses"]["unauthorized"];
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/delete_friend/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Delete friendship
-         * @description Given a friend ID, break off the friendship between the current user and the specified user.
-         *
-         *     **Note**: 200 OK does not indicate a successful response. You must check the `success` value of the response.
-         *
-         */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description User ID of the friend */
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            success?: boolean;
-                            errors?: {
-                                [key: string]: string[];
-                            };
-                        };
-                    };
-                };
-                401: components["responses"]["unauthorized"];
-                403: components["responses"]["forbidden"];
-                404: components["responses"]["not_found"];
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/get_currencies": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Supported currencies
-         * @description Returns a list of all currencies allowed by the system. These are mostly ISO 4217 codes, but we do
-         *     sometimes use pending codes or unofficial, colloquial codes (like BTC instead of XBT for Bitcoin).
-         *
-         */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            currencies?: {
-                                /** @example BRL */
-                                currency_code?: string;
-                                /** @example R$ */
-                                unit?: string;
-                            }[];
-                        };
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/get_expense/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        /** Get expense information */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            expense?: components["schemas"]["expense"];
-                        };
-                    };
-                };
-                401: components["responses"]["unauthorized"];
-                403: components["responses"]["forbidden"];
-                404: components["responses"]["not_found"];
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/get_expenses": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List the current user's expenses */
-        get: {
-            parameters: {
-                query?: {
-                    /** @description If provided, only expenses in that group will be returned, and `friend_id` will be ignored. */
-                    group_id?: number;
-                    /** @description ID of another user. If provided, only expenses between the current and provided user will be returned. */
-                    friend_id?: number;
-                    dated_after?: string;
-                    dated_before?: string;
-                    updated_after?: string;
-                    updated_before?: string;
-                    limit?: number;
-                    offset?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            expenses?: components["schemas"]["expense"][];
-                        };
-                    };
-                };
-                401: components["responses"]["unauthorized"];
-                403: components["responses"]["forbidden"];
-                404: components["responses"]["not_found"];
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/create_expense": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Create an expense
-         * @description Creates an expense. You may either split an expense equally (only with `group_id` provided),
-         *     or supply a list of shares.
-         *
-         *     When splitting equally, the authenticated user is assumed to be the payer.
-         *
-         *     When providing a list of shares, each share must include `paid_share` and `owed_share`, and must be identified by one of the following:
-         *     - `email`, `first_name`, and `last_name`
-         *     - `user_id`
-         *
-         *     **Note**: 200 OK does not indicate a successful response. The operation was successful only if `errors` is empty.
-         *
-         */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["equal_group_split"] | components["schemas"]["by_shares"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            expenses?: components["schemas"]["expense"][];
-                            errors?: Record<string, never>;
-                        };
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            errors?: {
-                                base?: string[];
-                            };
-                        };
-                    };
-                };
-                401: components["responses"]["unauthorized"];
-                403: components["responses"]["forbidden"];
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/update_expense/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Update an expense
-         * @description Updates an expense. Parameters are the same as in `create_expense`, but you only need to include parameters
-         *     that are changing from the previous values. If any values is supplied for `users__{index}__{property}`, _all_
-         *     shares for the expense will be overwritten with the provided values.
-         *
-         *     **Note**: 200 OK does not indicate a successful response. The operation was successful only if `errors` is empty.
-         *
-         */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description ID of the expense to update */
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["by_shares"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            expenses?: components["schemas"]["expense"][];
-                            errors?: Record<string, never>;
-                        };
-                    };
-                };
-                401: components["responses"]["unauthorized"];
-                403: components["responses"]["forbidden"];
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/delete_expense/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Delete an expense
-         * @description **Note**: 200 OK does not indicate a successful response. The operation was successful only if `success` is true.
-         *
-         */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description ID of the expense to delete */
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            success: boolean;
-                            errors?: Record<string, never>;
-                        };
-                    };
-                };
-                401: components["responses"]["unauthorized"];
-                403: components["responses"]["forbidden"];
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/undelete_expense/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Restore an expense
-         * @description **Note**: 200 OK does not indicate a successful response. The operation was successful only if `success` is true.
-         *
-         */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description ID of the expense to restore */
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            success?: boolean;
-                        };
-                    };
-                };
-                401: components["responses"]["unauthorized"];
-                403: components["responses"]["forbidden"];
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/get_comments": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get expense comments */
-        get: {
-            parameters: {
-                query: {
-                    /** @example 4193 */
-                    expense_id: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            comments?: components["schemas"]["comment"][];
-                        };
-                    };
-                };
-                401: components["responses"]["unauthorized"];
-                403: components["responses"]["forbidden"];
-                404: components["responses"]["not_found"];
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/create_comment": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Create a comment */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        /** @example 5123 */
-                        expense_id?: number;
-                        /** @example Does this include the delivery fee? */
-                        content?: string;
-                    };
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            comment?: components["schemas"]["comment"] & {
-                                /** @example 5123 */
-                                relation_id?: unknown;
-                                /** @example User */
-                                comment_type?: unknown;
-                                /** @example Does this include the delivery fee? */
-                                content?: unknown;
-                                user?: components["schemas"]["comment_user"];
-                            };
-                        };
-                    };
-                };
-                401: components["responses"]["unauthorized"];
-                403: components["responses"]["forbidden"];
-                404: components["responses"]["not_found"];
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/delete_comment/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Delete a comment
-         * @description Deletes a comment. Returns the deleted comment.
-         */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            comment?: components["schemas"]["comment"] & {
-                                /** @example User */
-                                comment_type?: unknown;
-                                /** @example Does this include the delivery fee? */
-                                content?: unknown;
-                                user?: components["schemas"]["comment_user"];
-                            };
-                        };
-                    };
-                };
-                401: components["responses"]["unauthorized"];
-                403: components["responses"]["forbidden"];
-                404: components["responses"]["not_found"];
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/get_notifications": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get notifications
-         * @description Return a list of recent activity on the users account with the most recent items first.
-         *     `content` will be suitable for display in HTML and uses only the `<strong>`, `<strike>`, `<small>`,
-         *     `<br>` and `<font color="#FFEE44">` tags.
-         *
-         *     The `type` value indicates what the notification is about. Notification types may be added in the future
-         *     without warning. Below is an incomplete list of notification types.
-         *
-         *     | Type | Meaning |
-         *     | ---- | ------- |
-         *     | 0    | Expense added |
-         *     | 1    | Expense updated |
-         *     | 2	   | Expense deleted |
-         *     | 3	   | Comment added |
-         *     | 4	   | Added to group |
-         *     | 5	   | Removed from group |
-         *     | 6	   | Group deleted |
-         *     | 7	   | Group settings changed |
-         *     | 8	   | Added as friend |
-         *     | 9	   | Removed as friend |
-         *     | 10	 | News (a URL should be included) |
-         *     | 11	 | Debt simplification |
-         *     | 12	 | Group undeleted |
-         *     | 13	 | Expense undeleted |
-         *     | 14	 | Group currency conversion |
-         *     | 15	 | Friend currency conversion |
-         *
-         *     **Note**: While all parameters are optional, the server sets arbitrary (but large) limits
-         *     on the number of notifications returned if you set a very old `updated_after` value or `limit` of `0` for a
-         *     user with many notifications.
-         *
-         */
-        get: {
-            parameters: {
-                query?: {
-                    /** @description If provided, returns only notifications after this time. */
-                    updated_after?: string;
-                    /** @description Omit (or provide `0`) to get the maximum number of notifications. */
-                    limit?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            notifications?: components["schemas"]["notification"][];
-                        };
-                    };
-                };
-                401: components["responses"]["unauthorized"];
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/get_categories": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Supported categories
-         * @description Returns a list of all categories Splitwise allows for expenses. There are parent categories that represent groups of categories with subcategories for more specific categorization.
-         *     When creating expenses, you must use a subcategory, not a parent category.
-         *     If you intend for an expense to be represented by the parent category and nothing more specific, please use the "Other" subcategory.
-         *
-         */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            categories?: components["schemas"]["parent_category"][];
-                        };
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-}
-export type webhooks = Record<string, never>;
-export interface components {
-    schemas: {
-        Debt: components["schemas"]["debt"];
-        User: components["schemas"]["user"];
-        CurrentUser: components["schemas"]["current_user"];
-        NotificationSettings: components["schemas"]["notification_settings"];
-        Group: components["schemas"]["group"];
-        UnauthorizedError: components["schemas"]["unauthorized"];
-        ForbiddenError: components["schemas"]["forbidden"];
-        NotFoundError: components["schemas"]["not_found"];
-        user: {
-            id: number;
-            /** @example Ada */
-            first_name: string;
-            /** @example Lovelace */
-            last_name?: string | null;
-            /** @example ada@example.com */
-            email: string;
-            /** @enum {string} */
-            registration_status: "confirmed" | "dummy" | "invited";
-            picture: {
-                small: string;
-                medium: string;
-                large: string;
-            };
-            /** @example false */
-            custom_picture: boolean;
-        };
-        /**
-         * @description User's notification preferences
-         * @example {
-         *       "added_as_friend": true
-         *     }
-         */
-        notification_settings: {
-            [key: string]: boolean;
-        };
-        current_user: components["schemas"]["user"] & {
-            /**
-             * @description ISO 8601 date/time indicating the last time notifications were read
-             * @example 2017-06-02T20:21:57Z
-             */
-            notifications_read: string;
-            /**
-             * @description Number of unread notifications since notifiations_read
-             * @example 12
-             */
-            notifications_count: number;
-            notifications: components["schemas"]["notification_settings"];
-            /** @example USD */
-            default_currency: string;
-            /**
-             * @description ISO_639-1 2-letter locale code
-             * @example en
-             */
-            locale: string;
-        };
-        unauthorized: {
-            /** @example Invalid API request: you are not logged in */
-            error: string;
-        };
-        forbidden: {
-            errors: {
-                base: string[];
-            };
-        };
-        not_found: {
-            errors: {
-                base: string[];
-            };
-        };
-        debt: {
-            /**
-             * @description User ID
-             * @example 18523
-             */
-            from: number;
-            /**
-             * @description User ID
-             * @example 90261
-             */
-            to: number;
-            /** @example 414.5 */
-            amount: string;
-            /** @example USD */
-            currency_code: string;
-        };
-        group: {
-            /** @example 321 */
-            id: number;
-            /** @example Housemates 2020 */
+    get?: never;
+    put?: never;
+    /**
+     * Create a group
+     * @description Creates a new group. Adds the current user to the group by default.
+     *
+     *     **Note**: group user parameters must be flattened into the format `users__{index}__{property}`, where
+     *     `property` is `user_id`, `first_name`, `last_name`, or `email`.
+     *     The user's email or ID must be provided.
+     *
+     */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": {
             name: string;
             /**
              * @description What is the group used for?
@@ -1548,388 +266,1703 @@ export interface components {
              * @example home
              * @enum {string}
              */
-            group_type: "home" | "trip" | "couple" | "other" | "apartment" | "house";
-            /** Format: date-time */
-            updated_at: string;
-            simplify_by_default: boolean;
-            members: (components["schemas"]["user"] & {
-                balance?: {
-                    /** @example USD */
-                    currency_code?: string;
-                    /** @example -5.02 */
-                    amount?: string;
-                }[];
-            })[];
-            original_debts: components["schemas"]["debt"][];
-            simplified_debts: components["schemas"]["debt"][];
-            avatar: {
-                /** @example null */
-                original?: string | null;
-                /** @example https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby2-house-1000px.png */
-                xxlarge: string;
-                /** @example https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby2-house-500px.png */
-                xlarge: string;
-                /** @example https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby2-house-200px.png */
-                large: string;
-                /** @example https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby2-house-100px.png */
-                medium: string;
-                /** @example https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby2-house-50px.png */
-                small: string;
-            };
-            custom_avatar: boolean;
-            cover_photo: {
-                /** @example https://s3.amazonaws.com/splitwise/uploads/group/default_cover_photos/coverphoto-ruby-1000px.png */
-                xxlarge: string;
-                /** @example https://s3.amazonaws.com/splitwise/uploads/group/default_cover_photos/coverphoto-ruby-500px.png */
-                xlarge: string;
-            };
-            /**
-             * @description A link the user can send to a friend to join the group directly
-             * @example https://www.splitwise.com/join/abQwErTyuI+12
-             */
-            invite_link: string;
-        };
-        balance: {
-            /** @example USD */
-            currency_code: string;
-            /** @example 414.5 */
-            amount: string;
-        };
-        friend: components["schemas"]["user"] & {
-            groups: {
-                /** @example 571 */
-                group_id?: number;
-                balance?: components["schemas"]["balance"][];
-            }[];
-            balance: components["schemas"]["balance"][];
-            /** Format: date-time */
-            updated_at: string;
-        };
-        common: {
-            /**
-             * @description A string representation of a decimal value, limited to 2 decimal places
-             * @example 25
-             */
-            cost: string;
-            /**
-             * @description A short description of the expense
-             * @example Grocery run
-             */
-            description: string;
-            /** @description Also known as "notes." */
-            details?: string | null;
-            /**
-             * Format: date-time
-             * @description The date and time the expense took place. May differ from `created_at`
-             * @example 2012-05-02T13:00:00Z
-             */
-            date: string;
-            /** @enum {string} */
-            repeat_interval: "never" | "weekly" | "fortnightly" | "monthly" | "yearly";
-            /**
-             * @description A currency code. Must be in the list from `get_currencies`
-             * @example USD
-             */
-            currency_code: string;
-            /**
-             * @description A category id from `get_categories`
-             * @example 15
-             */
-            category_id: number;
-        };
-        comment_user: {
-            /** @example 491923 */
-            id: number;
-            /** @example Jane */
-            first_name: string;
-            /** @example Doe */
-            last_name: string;
-            picture: {
-                /** @example image_url */
-                medium: string;
-            };
-        };
-        share: {
-            user: components["schemas"]["comment_user"];
-            /** @example 491923 */
-            user_id: number;
-            /** @example 8.99 */
-            paid_share: string;
-            /** @example 4.5 */
-            owed_share: string;
-            /** @example 4.49 */
-            net_balance: string;
-        };
-        comment: {
-            /** @example 79800950 */
-            id: number;
-            /** @example John D. updated this transaction: - The cost changed from $6.99 to $8.99 */
-            content: string;
-            /** @enum {string} */
-            comment_type: "System" | "User";
-            /** @enum {string} */
-            relation_type: "ExpenseComment";
-            /**
-             * @description ID of the subject of the comment
-             * @example 855870953
-             */
-            relation_id: number;
-            /** Format: date-time */
-            created_at: string;
-            /** Format: date-time */
-            deleted_at?: string | null;
-            user: components["schemas"]["comment_user"];
-        };
-        expense: components["schemas"]["common"] & {
-            /**
-             * Format: int64
-             * @example 51023
-             */
-            id: number;
-            /**
-             * @description Null if the expense is not associated with a group.
-             * @example 391
-             */
-            group_id?: number | null;
-            /**
-             * @description Null if the expense is not associated with a friendship.
-             * @example 4818
-             */
-            friendship_id?: number | null;
-            /** @example 491030 */
-            expense_bundle_id?: number | null;
-            /** @example Brunch */
-            description: string;
-            /** @description Whether the expense recurs automatically */
-            repeats: boolean;
-            /** @enum {string} */
-            repeat_interval: "never" | "weekly" | "fortnightly" | "monthly" | "yearly";
-            /** @description Whether a reminder will be sent to involved users in advance of the next occurrence of a recurring expense.
-             *     Only applicable if the expense recurs.
-             *      */
-            email_reminder: boolean;
-            /**
-             * @description Number of days in advance to remind involved users about the next occurrence of a new expense.
-             *     Only applicable if the expense recurs.
-             *
-             * @enum {integer|null}
-             */
-            email_reminder_in_advance?: null | -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 14;
-            /** @description The date of the next occurrence of a recurring expense. Only applicable if the expense recurs. */
-            next_repeat?: string | null;
-            /** @description Also known as "notes." */
-            details?: string | null;
-            comments_count: number;
-            /** @description Whether this was a payment between users */
-            payment: boolean;
-            /** @description If a payment was made via an integrated third party service, whether it was confirmed by that service. */
-            transaction_confirmed: boolean;
-            /** @example 25.0 */
-            cost: string;
-            /** @example USD */
-            currency_code: string;
-            repayments: {
-                /**
-                 * @description ID of the owing user
-                 * @example 6788709
-                 */
-                from?: number;
-                /**
-                 * @description ID of the owed user
-                 * @example 270896089
-                 */
-                to?: number;
-                /** @example 25.0 */
-                amount?: string;
-            }[];
-            /**
-             * Format: date-time
-             * @description The date and time the expense took place. May differ from `created_at`
-             * @example 2012-05-02T13:00:00Z
-             */
-            date: string;
-            /**
-             * Format: date-time
-             * @description The date and time the expense was created on Splitwise
-             * @example 2012-07-27T06:17:09Z
-             */
-            created_at: string;
-            created_by: components["schemas"]["user"] & unknown;
-            /**
-             * Format: date-time
-             * @description The last time the expense was updated.
-             * @example 2012-12-23T05:47:02Z
-             */
-            updated_at: string;
-            updated_by: components["schemas"]["user"] & unknown;
-            /**
-             * Format: date-time
-             * @description If the expense was deleted, when it was deleted.
-             * @example 2012-12-23T05:47:02Z
-             */
-            deleted_at?: string | null;
-            deleted_by: components["schemas"]["user"] & unknown;
-            category: {
-                /** @example 5 */
-                id: number;
-                /**
-                 * @description Translated to the current user's locale
-                 * @example Electricity
-                 */
-                name: string;
-            };
-            receipt: {
-                /** @example https://splitwise.s3.amazonaws.com/uploads/expense/receipt/3678899/large_95f8ecd1-536b-44ce-ad9b-0a9498bb7cf0.png */
-                large?: string | null;
-                /** @example https://splitwise.s3.amazonaws.com/uploads/expense/receipt/3678899/95f8ecd1-536b-44ce-ad9b-0a9498bb7cf0.png */
-                original?: string | null;
-            };
-            users: components["schemas"]["share"][];
-            comments: components["schemas"]["comment"][];
-        };
-        equal_group_split: components["schemas"]["common"] & {
-            /** @description The group to put this expense in. */
-            group_id: number;
-            /** @enum {boolean} */
-            split_equally: true;
-        } & unknown;
-        by_shares: components["schemas"]["common"] & ({
-            /** @description The group to put this expense in, or `0` to create an expense outside of a group. */
-            group_id: number;
-            /** @example 54123 */
-            users__0__user_id: number;
-            /**
-             * @description Decimal amount as a string with 2 decimal places. The amount this user paid for the expense
-             * @example 25
-             */
-            users__0__paid_share: string;
-            /**
-             * @description Decimal amount as a string with 2 decimal places. The amount this user owes for the expense
-             * @example 13.55
-             */
-            users__0__owed_share: string;
-            /** @example Neu */
-            users__1__first_name: string;
-            /** @example Yewzer */
-            users__1__last_name: string;
-            /** @example neuyewxyz@example.com */
-            users__1__email: string;
-            /**
-             * @description Decimal amount as a string with 2 decimal places. The amount this user paid for the expense
-             * @example 0
-             */
-            users__1__paid_share: string;
-            /**
-             * @description Decimal amount as a string with 2 decimal places. The amount this user owes for the expense
-             * @example 11.45
-             */
-            users__1__owed_share: string;
-        } & {
+            group_type?:
+              | "home"
+              | "trip"
+              | "couple"
+              | "other"
+              | "apartment"
+              | "house";
+            /** @description Turn on simplify debts? */
+            simplify_by_default?: boolean;
+          } & {
             [key: string]: string;
-        }) & unknown;
-        notification: {
-            /** @example 32514315 */
-            id: number;
-            type: number;
-            /** Format: date-time */
-            created_at: string;
-            /** @example 2 */
-            created_by: number;
-            source?: {
-                /** @example Expense */
-                type: string;
-                /** @example 865077 */
-                id: number;
-                url?: string | null;
-            } | null;
-            /** @example https://s3.amazonaws.com/splitwise/uploads/notifications/v2/0-venmo.png */
-            image_url: string;
-            /** @enum {string} */
-            image_shape: "square" | "circle";
-            /** @example <strong>You</strong> paid <strong>Jon H.</strong>.<br><font color=\"#5bc5a7\">You paid $23.45</font> */
-            content: string;
+          };
         };
-        category: {
-            /** @example 48 */
-            id: number;
-            /** @example Cleaning */
-            name: string;
-            /** @example https://s3.amazonaws.com/splitwise/uploads/category/icon/square/utilities/cleaning.png */
-            icon: string;
-            icon_types: {
-                slim: {
-                    /** Format: uri */
-                    small: string;
-                    /** Format: uri */
-                    large: string;
-                };
-                square: {
-                    /** Format: uri */
-                    large: string;
-                    /** Format: uri */
-                    xlarge: string;
-                };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              group?: components["schemas"]["group"];
             };
+          };
         };
-        parent_category: components["schemas"]["category"] & {
-            /** @example 1 */
-            id: unknown;
-            /** @example Utilities */
-            name: unknown;
-            subcategories: components["schemas"]["category"][];
+        /** @description Bad Request */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              errors?: {
+                base?: string[];
+              };
+            };
+          };
         };
+      };
     };
-    responses: {
-        Unauthorized: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content?: never;
-        };
-        Forbidden: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content?: never;
-        };
-        Not_Found: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content?: never;
-        };
-        /** @description Invalid API key or OAuth access token */
-        unauthorized: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                "application/json": components["schemas"]["unauthorized"];
-            };
-        };
-        /** @description Forbidden */
-        forbidden: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                "application/json": components["schemas"]["forbidden"];
-            };
-        };
-        /** @description Not Found */
-        not_found: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                "application/json": components["schemas"]["not_found"];
-            };
-        };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/delete_group/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    parameters: never;
-    requestBodies: never;
-    headers: never;
-    pathItems: never;
+    get?: never;
+    put?: never;
+    /**
+     * Delete a group
+     * @description Delete an existing group. Destroys all associated records (expenses, etc.)
+     */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              success?: boolean;
+            };
+          };
+        };
+        401: components["responses"]["unauthorized"];
+        403: components["responses"]["forbidden"];
+        404: components["responses"]["not_found"];
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/undelete_group/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Restore a group
+     * @description Restores a deleted group.
+     *
+     *     **Note**: 200 OK does not indicate a successful response. You must check the `success` value of the response.
+     *
+     */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              success?: boolean;
+              errors?: string[];
+            };
+          };
+        };
+        401: components["responses"]["unauthorized"];
+        403: components["responses"]["forbidden"];
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/add_user_to_group": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Add a user to a group
+     * @description **Note**: 200 OK does not indicate a successful response. You must check the `success` value of the response.
+     *
+     */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json":
+            | {
+                /** @example 49012 */
+                group_id?: number;
+                /** @example 7999632 */
+                user_id: number;
+              }
+            | {
+                /** @example 49012 */
+                group_id?: number;
+                /** @example Grace */
+                first_name: string;
+                /** @example Hopper */
+                last_name: string;
+                /** @example gracehopper@example.com */
+                email: string;
+              };
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              success?: boolean;
+              user?: components["schemas"]["user"];
+              errors?: {
+                [key: string]: string[];
+              };
+            };
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/remove_user_from_group": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Remove a user from a group
+     * @description Remove a user from a group. Does not succeed if the user has a non-zero balance.
+     *
+     *     **Note:** 200 OK does not indicate a successful response. You must check the success value of the response.
+     *
+     */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": {
+            /** @example 4012 */
+            group_id: number;
+            /** @example 940142 */
+            user_id: number;
+          };
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              success?: boolean;
+              errors?: {
+                [key: string]: string[];
+              };
+            };
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/get_friends": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * List current user's friends
+     * @description **Note**: `group` objects only include group balances with that friend.
+     *
+     */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              friends?: (components["schemas"]["friend"] & unknown)[];
+            };
+          };
+        };
+        401: components["responses"]["unauthorized"];
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/get_friend/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /** @description User ID of the friend */
+        id: number;
+      };
+      cookie?: never;
+    };
+    /** Get details about a friend */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description User ID of the friend */
+          id: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              friend?: components["schemas"]["friend"];
+            };
+          };
+        };
+        401: components["responses"]["unauthorized"];
+        403: components["responses"]["forbidden"];
+        404: components["responses"]["not_found"];
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/create_friend": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Add a friend
+     * @description Adds a friend. If the other user does not exist, you must supply `user_first_name`.
+     *     If the other user exists, `user_first_name` and `user_last_name` will be ignored.
+     *
+     */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": {
+            /** @example ada@example.com */
+            user_email?: string;
+            /** @example Ada */
+            user_first_name?: string;
+            /** @example Lovelace */
+            user_last_name?: string;
+          };
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              friend?: components["schemas"]["friend"];
+            };
+          };
+        };
+        401: components["responses"]["unauthorized"];
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/create_friends": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Add friends
+     * @description Add multiple friends at once.
+     *
+     *     For each user, if the other user does not exist, you must supply `friends__{index}__first_name`.
+     *
+     *     **Note**: user parameters must be flattened into the format `friends__{index}__{property}`, where
+     *     `property` is `first_name`, `last_name`, or `email`.
+     *
+     */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          /** @example {
+           *       "friends__0__first_name": "Alan",
+           *       "friends__0__last_name": "Turing",
+           *       "friends__0__email": "alan@example.org",
+           *       "friends__1__email": "existing_user@example.com"
+           *     } */
+          "application/json": {
+            [key: string]: string;
+          };
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              users?: (components["schemas"]["friend"] & unknown)[];
+              errors?: {
+                [key: string]: string[];
+              };
+            };
+          };
+        };
+        /** @description Bad Request */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              /** @example [] */
+              users?: (components["schemas"]["friend"] & unknown)[];
+              /** @example {
+               *       "base": [
+               *         "Please supply a name for this user"
+               *       ]
+               *     } */
+              errors?: {
+                [key: string]: string[];
+              };
+            };
+          };
+        };
+        401: components["responses"]["unauthorized"];
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/delete_friend/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Delete friendship
+     * @description Given a friend ID, break off the friendship between the current user and the specified user.
+     *
+     *     **Note**: 200 OK does not indicate a successful response. You must check the `success` value of the response.
+     *
+     */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description User ID of the friend */
+          id: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              success?: boolean;
+              errors?: {
+                [key: string]: string[];
+              };
+            };
+          };
+        };
+        401: components["responses"]["unauthorized"];
+        403: components["responses"]["forbidden"];
+        404: components["responses"]["not_found"];
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/get_currencies": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Supported currencies
+     * @description Returns a list of all currencies allowed by the system. These are mostly ISO 4217 codes, but we do
+     *     sometimes use pending codes or unofficial, colloquial codes (like BTC instead of XBT for Bitcoin).
+     *
+     */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              currencies?: {
+                /** @example BRL */
+                currency_code?: string;
+                /** @example R$ */
+                unit?: string;
+              }[];
+            };
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/get_expense/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    /** Get expense information */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              expense?: components["schemas"]["expense"];
+            };
+          };
+        };
+        401: components["responses"]["unauthorized"];
+        403: components["responses"]["forbidden"];
+        404: components["responses"]["not_found"];
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/get_expenses": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List the current user's expenses */
+    get: {
+      parameters: {
+        query?: {
+          /** @description If provided, only expenses in that group will be returned, and `friend_id` will be ignored. */
+          group_id?: number;
+          /** @description ID of another user. If provided, only expenses between the current and provided user will be returned. */
+          friend_id?: number;
+          dated_after?: string;
+          dated_before?: string;
+          updated_after?: string;
+          updated_before?: string;
+          limit?: number;
+          offset?: number;
+        };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              expenses?: components["schemas"]["expense"][];
+            };
+          };
+        };
+        401: components["responses"]["unauthorized"];
+        403: components["responses"]["forbidden"];
+        404: components["responses"]["not_found"];
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/create_expense": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Create an expense
+     * @description Creates an expense. You may either split an expense equally (only with `group_id` provided),
+     *     or supply a list of shares.
+     *
+     *     When splitting equally, the authenticated user is assumed to be the payer.
+     *
+     *     When providing a list of shares, each share must include `paid_share` and `owed_share`, and must be identified by one of the following:
+     *     - `email`, `first_name`, and `last_name`
+     *     - `user_id`
+     *
+     *     **Note**: 200 OK does not indicate a successful response. The operation was successful only if `errors` is empty.
+     *
+     */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json":
+            | components["schemas"]["equal_group_split"]
+            | components["schemas"]["by_shares"];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              expenses?: components["schemas"]["expense"][];
+              errors?: Record<string, never>;
+            };
+          };
+        };
+        /** @description Bad Request */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              errors?: {
+                base?: string[];
+              };
+            };
+          };
+        };
+        401: components["responses"]["unauthorized"];
+        403: components["responses"]["forbidden"];
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/update_expense/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Update an expense
+     * @description Updates an expense. Parameters are the same as in `create_expense`, but you only need to include parameters
+     *     that are changing from the previous values. If any values is supplied for `users__{index}__{property}`, _all_
+     *     shares for the expense will be overwritten with the provided values.
+     *
+     *     **Note**: 200 OK does not indicate a successful response. The operation was successful only if `errors` is empty.
+     *
+     */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description ID of the expense to update */
+          id: number;
+        };
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["by_shares"];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              expenses?: components["schemas"]["expense"][];
+              errors?: Record<string, never>;
+            };
+          };
+        };
+        401: components["responses"]["unauthorized"];
+        403: components["responses"]["forbidden"];
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/delete_expense/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Delete an expense
+     * @description **Note**: 200 OK does not indicate a successful response. The operation was successful only if `success` is true.
+     *
+     */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description ID of the expense to delete */
+          id: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              success: boolean;
+              errors?: Record<string, never>;
+            };
+          };
+        };
+        401: components["responses"]["unauthorized"];
+        403: components["responses"]["forbidden"];
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/undelete_expense/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Restore an expense
+     * @description **Note**: 200 OK does not indicate a successful response. The operation was successful only if `success` is true.
+     *
+     */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description ID of the expense to restore */
+          id: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              success?: boolean;
+            };
+          };
+        };
+        401: components["responses"]["unauthorized"];
+        403: components["responses"]["forbidden"];
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/get_comments": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get expense comments */
+    get: {
+      parameters: {
+        query: {
+          /** @example 4193 */
+          expense_id: number;
+        };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              comments?: components["schemas"]["comment"][];
+            };
+          };
+        };
+        401: components["responses"]["unauthorized"];
+        403: components["responses"]["forbidden"];
+        404: components["responses"]["not_found"];
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/create_comment": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Create a comment */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          "application/json": {
+            /** @example 5123 */
+            expense_id?: number;
+            /** @example Does this include the delivery fee? */
+            content?: string;
+          };
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              comment?: components["schemas"]["comment"] & {
+                /** @example 5123 */
+                relation_id?: unknown;
+                /** @example User */
+                comment_type?: unknown;
+                /** @example Does this include the delivery fee? */
+                content?: unknown;
+                user?: components["schemas"]["comment_user"];
+              };
+            };
+          };
+        };
+        401: components["responses"]["unauthorized"];
+        403: components["responses"]["forbidden"];
+        404: components["responses"]["not_found"];
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/delete_comment/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Delete a comment
+     * @description Deletes a comment. Returns the deleted comment.
+     */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              comment?: components["schemas"]["comment"] & {
+                /** @example User */
+                comment_type?: unknown;
+                /** @example Does this include the delivery fee? */
+                content?: unknown;
+                user?: components["schemas"]["comment_user"];
+              };
+            };
+          };
+        };
+        401: components["responses"]["unauthorized"];
+        403: components["responses"]["forbidden"];
+        404: components["responses"]["not_found"];
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/get_notifications": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get notifications
+     * @description Return a list of recent activity on the users account with the most recent items first.
+     *     `content` will be suitable for display in HTML and uses only the `<strong>`, `<strike>`, `<small>`,
+     *     `<br>` and `<font color="#FFEE44">` tags.
+     *
+     *     The `type` value indicates what the notification is about. Notification types may be added in the future
+     *     without warning. Below is an incomplete list of notification types.
+     *
+     *     | Type | Meaning |
+     *     | ---- | ------- |
+     *     | 0    | Expense added |
+     *     | 1    | Expense updated |
+     *     | 2	   | Expense deleted |
+     *     | 3	   | Comment added |
+     *     | 4	   | Added to group |
+     *     | 5	   | Removed from group |
+     *     | 6	   | Group deleted |
+     *     | 7	   | Group settings changed |
+     *     | 8	   | Added as friend |
+     *     | 9	   | Removed as friend |
+     *     | 10	 | News (a URL should be included) |
+     *     | 11	 | Debt simplification |
+     *     | 12	 | Group undeleted |
+     *     | 13	 | Expense undeleted |
+     *     | 14	 | Group currency conversion |
+     *     | 15	 | Friend currency conversion |
+     *
+     *     **Note**: While all parameters are optional, the server sets arbitrary (but large) limits
+     *     on the number of notifications returned if you set a very old `updated_after` value or `limit` of `0` for a
+     *     user with many notifications.
+     *
+     */
+    get: {
+      parameters: {
+        query?: {
+          /** @description If provided, returns only notifications after this time. */
+          updated_after?: string;
+          /** @description Omit (or provide `0`) to get the maximum number of notifications. */
+          limit?: number;
+        };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              notifications?: components["schemas"]["notification"][];
+            };
+          };
+        };
+        401: components["responses"]["unauthorized"];
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/get_categories": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Supported categories
+     * @description Returns a list of all categories Splitwise allows for expenses. There are parent categories that represent groups of categories with subcategories for more specific categorization.
+     *     When creating expenses, you must use a subcategory, not a parent category.
+     *     If you intend for an expense to be represented by the parent category and nothing more specific, please use the "Other" subcategory.
+     *
+     */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": {
+              categories?: components["schemas"]["parent_category"][];
+            };
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+}
+export type webhooks = Record<string, never>;
+export interface components {
+  schemas: {
+    Debt: components["schemas"]["debt"];
+    User: components["schemas"]["user"];
+    CurrentUser: components["schemas"]["current_user"];
+    NotificationSettings: components["schemas"]["notification_settings"];
+    Group: components["schemas"]["group"];
+    UnauthorizedError: components["schemas"]["unauthorized"];
+    ForbiddenError: components["schemas"]["forbidden"];
+    NotFoundError: components["schemas"]["not_found"];
+    user: {
+      id: number;
+      /** @example Ada */
+      first_name: string;
+      /** @example Lovelace */
+      last_name?: string | null;
+      /** @example ada@example.com */
+      email: string;
+      /** @enum {string} */
+      registration_status: "confirmed" | "dummy" | "invited";
+      picture: {
+        small: string;
+        medium: string;
+        large: string;
+      };
+      /** @example false */
+      custom_picture: boolean;
+    };
+    /**
+     * @description User's notification preferences
+     * @example {
+     *       "added_as_friend": true
+     *     }
+     */
+    notification_settings: {
+      [key: string]: boolean;
+    };
+    current_user: components["schemas"]["user"] & {
+      /**
+       * @description ISO 8601 date/time indicating the last time notifications were read
+       * @example 2017-06-02T20:21:57Z
+       */
+      notifications_read: string;
+      /**
+       * @description Number of unread notifications since notifiations_read
+       * @example 12
+       */
+      notifications_count: number;
+      notifications: components["schemas"]["notification_settings"];
+      /** @example USD */
+      default_currency: string;
+      /**
+       * @description ISO_639-1 2-letter locale code
+       * @example en
+       */
+      locale: string;
+    };
+    unauthorized: {
+      /** @example Invalid API request: you are not logged in */
+      error: string;
+    };
+    forbidden: {
+      errors: {
+        base: string[];
+      };
+    };
+    not_found: {
+      errors: {
+        base: string[];
+      };
+    };
+    debt: {
+      /**
+       * @description User ID
+       * @example 18523
+       */
+      from: number;
+      /**
+       * @description User ID
+       * @example 90261
+       */
+      to: number;
+      /** @example 414.5 */
+      amount: string;
+      /** @example USD */
+      currency_code: string;
+    };
+    group: {
+      /** @example 321 */
+      id: number;
+      /** @example Housemates 2020 */
+      name: string;
+      /**
+       * @description What is the group used for?
+       *
+       *     **Note**: It is recommended to use `home` in place of `house` or `apartment`.
+       *
+       * @example home
+       * @enum {string}
+       */
+      group_type: "home" | "trip" | "couple" | "other" | "apartment" | "house";
+      /** Format: date-time */
+      updated_at: string;
+      simplify_by_default: boolean;
+      members: (components["schemas"]["user"] & {
+        balance?: {
+          /** @example USD */
+          currency_code?: string;
+          /** @example -5.02 */
+          amount?: string;
+        }[];
+      })[];
+      original_debts: components["schemas"]["debt"][];
+      simplified_debts: components["schemas"]["debt"][];
+      avatar: {
+        /** @example null */
+        original?: string | null;
+        /** @example https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby2-house-1000px.png */
+        xxlarge: string;
+        /** @example https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby2-house-500px.png */
+        xlarge: string;
+        /** @example https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby2-house-200px.png */
+        large: string;
+        /** @example https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby2-house-100px.png */
+        medium: string;
+        /** @example https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby2-house-50px.png */
+        small: string;
+      };
+      custom_avatar: boolean;
+      cover_photo: {
+        /** @example https://s3.amazonaws.com/splitwise/uploads/group/default_cover_photos/coverphoto-ruby-1000px.png */
+        xxlarge: string;
+        /** @example https://s3.amazonaws.com/splitwise/uploads/group/default_cover_photos/coverphoto-ruby-500px.png */
+        xlarge: string;
+      };
+      /**
+       * @description A link the user can send to a friend to join the group directly
+       * @example https://www.splitwise.com/join/abQwErTyuI+12
+       */
+      invite_link: string;
+    };
+    balance: {
+      /** @example USD */
+      currency_code: string;
+      /** @example 414.5 */
+      amount: string;
+    };
+    friend: components["schemas"]["user"] & {
+      groups: {
+        /** @example 571 */
+        group_id?: number;
+        balance?: components["schemas"]["balance"][];
+      }[];
+      balance: components["schemas"]["balance"][];
+      /** Format: date-time */
+      updated_at: string;
+    };
+    common: {
+      /**
+       * @description A string representation of a decimal value, limited to 2 decimal places
+       * @example 25
+       */
+      cost: string;
+      /**
+       * @description A short description of the expense
+       * @example Grocery run
+       */
+      description: string;
+      /** @description Also known as "notes." */
+      details?: string | null;
+      /**
+       * Format: date-time
+       * @description The date and time the expense took place. May differ from `created_at`
+       * @example 2012-05-02T13:00:00Z
+       */
+      date: string;
+      /** @enum {string} */
+      repeat_interval:
+        | "never"
+        | "weekly"
+        | "fortnightly"
+        | "monthly"
+        | "yearly";
+      /**
+       * @description A currency code. Must be in the list from `get_currencies`
+       * @example USD
+       */
+      currency_code: string;
+      /**
+       * @description A category id from `get_categories`
+       * @example 15
+       */
+      category_id: number;
+    };
+    comment_user: {
+      /** @example 491923 */
+      id: number;
+      /** @example Jane */
+      first_name: string;
+      /** @example Doe */
+      last_name: string;
+      picture: {
+        /** @example image_url */
+        medium: string;
+      };
+    };
+    share: {
+      user: components["schemas"]["comment_user"];
+      /** @example 491923 */
+      user_id: number;
+      /** @example 8.99 */
+      paid_share: string;
+      /** @example 4.5 */
+      owed_share: string;
+      /** @example 4.49 */
+      net_balance: string;
+    };
+    comment: {
+      /** @example 79800950 */
+      id: number;
+      /** @example John D. updated this transaction: - The cost changed from $6.99 to $8.99 */
+      content: string;
+      /** @enum {string} */
+      comment_type: "System" | "User";
+      /** @enum {string} */
+      relation_type: "ExpenseComment";
+      /**
+       * @description ID of the subject of the comment
+       * @example 855870953
+       */
+      relation_id: number;
+      /** Format: date-time */
+      created_at: string;
+      /** Format: date-time */
+      deleted_at?: string | null;
+      user: components["schemas"]["comment_user"];
+    };
+    expense: components["schemas"]["common"] & {
+      /**
+       * Format: int64
+       * @example 51023
+       */
+      id: number;
+      /**
+       * @description Null if the expense is not associated with a group.
+       * @example 391
+       */
+      group_id?: number | null;
+      /**
+       * @description Null if the expense is not associated with a friendship.
+       * @example 4818
+       */
+      friendship_id?: number | null;
+      /** @example 491030 */
+      expense_bundle_id?: number | null;
+      /** @example Brunch */
+      description: string;
+      /** @description Whether the expense recurs automatically */
+      repeats: boolean;
+      /** @enum {string} */
+      repeat_interval:
+        | "never"
+        | "weekly"
+        | "fortnightly"
+        | "monthly"
+        | "yearly";
+      /** @description Whether a reminder will be sent to involved users in advance of the next occurrence of a recurring expense.
+       *     Only applicable if the expense recurs.
+       *      */
+      email_reminder: boolean;
+      /**
+       * @description Number of days in advance to remind involved users about the next occurrence of a new expense.
+       *     Only applicable if the expense recurs.
+       *
+       * @enum {integer|null}
+       */
+      email_reminder_in_advance?:
+        | null
+        | -1
+        | 0
+        | 1
+        | 2
+        | 3
+        | 4
+        | 5
+        | 6
+        | 7
+        | 14;
+      /** @description The date of the next occurrence of a recurring expense. Only applicable if the expense recurs. */
+      next_repeat?: string | null;
+      /** @description Also known as "notes." */
+      details?: string | null;
+      comments_count: number;
+      /** @description Whether this was a payment between users */
+      payment: boolean;
+      /** @description If a payment was made via an integrated third party service, whether it was confirmed by that service. */
+      transaction_confirmed: boolean;
+      /** @example 25.0 */
+      cost: string;
+      /** @example USD */
+      currency_code: string;
+      repayments: {
+        /**
+         * @description ID of the owing user
+         * @example 6788709
+         */
+        from?: number;
+        /**
+         * @description ID of the owed user
+         * @example 270896089
+         */
+        to?: number;
+        /** @example 25.0 */
+        amount?: string;
+      }[];
+      /**
+       * Format: date-time
+       * @description The date and time the expense took place. May differ from `created_at`
+       * @example 2012-05-02T13:00:00Z
+       */
+      date: string;
+      /**
+       * Format: date-time
+       * @description The date and time the expense was created on Splitwise
+       * @example 2012-07-27T06:17:09Z
+       */
+      created_at: string;
+      created_by: components["schemas"]["user"] & unknown;
+      /**
+       * Format: date-time
+       * @description The last time the expense was updated.
+       * @example 2012-12-23T05:47:02Z
+       */
+      updated_at: string;
+      updated_by: components["schemas"]["user"] & unknown;
+      /**
+       * Format: date-time
+       * @description If the expense was deleted, when it was deleted.
+       * @example 2012-12-23T05:47:02Z
+       */
+      deleted_at?: string | null;
+      deleted_by: components["schemas"]["user"] & unknown;
+      category: {
+        /** @example 5 */
+        id: number;
+        /**
+         * @description Translated to the current user's locale
+         * @example Electricity
+         */
+        name: string;
+      };
+      receipt: {
+        /** @example https://splitwise.s3.amazonaws.com/uploads/expense/receipt/3678899/large_95f8ecd1-536b-44ce-ad9b-0a9498bb7cf0.png */
+        large?: string | null;
+        /** @example https://splitwise.s3.amazonaws.com/uploads/expense/receipt/3678899/95f8ecd1-536b-44ce-ad9b-0a9498bb7cf0.png */
+        original?: string | null;
+      };
+      users: components["schemas"]["share"][];
+      comments: components["schemas"]["comment"][];
+    };
+    equal_group_split: components["schemas"]["common"] & {
+      /** @description The group to put this expense in. */
+      group_id: number;
+      /** @enum {boolean} */
+      split_equally: true;
+    } & unknown;
+    by_shares: components["schemas"]["common"] &
+      ({
+        /** @description The group to put this expense in, or `0` to create an expense outside of a group. */
+        group_id: number;
+        /** @example 54123 */
+        users__0__user_id: number;
+        /**
+         * @description Decimal amount as a string with 2 decimal places. The amount this user paid for the expense
+         * @example 25
+         */
+        users__0__paid_share: string;
+        /**
+         * @description Decimal amount as a string with 2 decimal places. The amount this user owes for the expense
+         * @example 13.55
+         */
+        users__0__owed_share: string;
+        /** @example Neu */
+        users__1__first_name: string;
+        /** @example Yewzer */
+        users__1__last_name: string;
+        /** @example neuyewxyz@example.com */
+        users__1__email: string;
+        /**
+         * @description Decimal amount as a string with 2 decimal places. The amount this user paid for the expense
+         * @example 0
+         */
+        users__1__paid_share: string;
+        /**
+         * @description Decimal amount as a string with 2 decimal places. The amount this user owes for the expense
+         * @example 11.45
+         */
+        users__1__owed_share: string;
+      } & {
+        [key: string]: string;
+      }) &
+      unknown;
+    notification: {
+      /** @example 32514315 */
+      id: number;
+      type: number;
+      /** Format: date-time */
+      created_at: string;
+      /** @example 2 */
+      created_by: number;
+      source?: {
+        /** @example Expense */
+        type: string;
+        /** @example 865077 */
+        id: number;
+        url?: string | null;
+      } | null;
+      /** @example https://s3.amazonaws.com/splitwise/uploads/notifications/v2/0-venmo.png */
+      image_url: string;
+      /** @enum {string} */
+      image_shape: "square" | "circle";
+      /** @example <strong>You</strong> paid <strong>Jon H.</strong>.<br><font color=\"#5bc5a7\">You paid $23.45</font> */
+      content: string;
+    };
+    category: {
+      /** @example 48 */
+      id: number;
+      /** @example Cleaning */
+      name: string;
+      /** @example https://s3.amazonaws.com/splitwise/uploads/category/icon/square/utilities/cleaning.png */
+      icon: string;
+      icon_types: {
+        slim: {
+          /** Format: uri */
+          small: string;
+          /** Format: uri */
+          large: string;
+        };
+        square: {
+          /** Format: uri */
+          large: string;
+          /** Format: uri */
+          xlarge: string;
+        };
+      };
+    };
+    parent_category: components["schemas"]["category"] & {
+      /** @example 1 */
+      id: unknown;
+      /** @example Utilities */
+      name: unknown;
+      subcategories: components["schemas"]["category"][];
+    };
+  };
+  responses: {
+    Unauthorized: {
+      headers: {
+        [name: string]: unknown;
+      };
+      content?: never;
+    };
+    Forbidden: {
+      headers: {
+        [name: string]: unknown;
+      };
+      content?: never;
+    };
+    Not_Found: {
+      headers: {
+        [name: string]: unknown;
+      };
+      content?: never;
+    };
+    /** @description Invalid API key or OAuth access token */
+    unauthorized: {
+      headers: {
+        [name: string]: unknown;
+      };
+      content: {
+        "application/json": components["schemas"]["unauthorized"];
+      };
+    };
+    /** @description Forbidden */
+    forbidden: {
+      headers: {
+        [name: string]: unknown;
+      };
+      content: {
+        "application/json": components["schemas"]["forbidden"];
+      };
+    };
+    /** @description Not Found */
+    not_found: {
+      headers: {
+        [name: string]: unknown;
+      };
+      content: {
+        "application/json": components["schemas"]["not_found"];
+      };
+    };
+  };
+  parameters: never;
+  requestBodies: never;
+  headers: never;
+  pathItems: never;
 }
 export type $defs = Record<string, never>;
 export type operations = Record<string, never>;

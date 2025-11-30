@@ -38,7 +38,7 @@ if (openApiData.components && openApiData.components.schemas) {
   writeFileSync(
     "openapi_updated.json",
     JSON.stringify(openApiData, null, 2),
-    "utf-8"
+    "utf-8",
   );
   console.log("Updated OpenAPI file saved as openapi_updated.json");
 } else {

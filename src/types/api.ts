@@ -64,7 +64,7 @@ export type CreateExpenseRequest =
 export interface CreateExpenseResponse {
   expenses?: components["schemas"]["expense"][];
   errors?: paths["/create_expense"]["post"]["responses"]["400"]["content"]["application/json"]["errors"];
-};
+}
 
 export type UpdateExpenseRequest =
   paths["/update_expense/{id}"]["post"]["requestBody"]["content"]["application/json"];
