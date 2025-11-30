@@ -3,66 +3,66 @@ name: Code-Quality
 on:
   pull_request:
     branches:
-      - main # Passe dies an, wenn du auf anderen Branches testen möchtest
+      - main
   push:
     branches:
       - main
 
 jobs:
-  code-quality:
-    name: Code Quality & Build Test
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
-
     steps:
-      - name: 📥 Checkout Repository
+      - name: Checkout Repository
         uses: actions/checkout@v5
 
-      - name: 🔧 Set up Node.js
-        uses: actions/setup-node@v5
-        with:
-          node-version: 20
-          cache: "npm"
+      - name: Setup Environment
+        uses: ./.github/actions/setup
 
-      - name: 📦 Install Dependencies
-        run: npm ci
+      - name: Lint Code with ESLint
+        run: npm run lint
+
+  typecheck:
+    name: Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup
 
       - name: Running typecheck
         run: npx tsc --noEmit
 
-      - name: 🔍 Lint Code with ESLint
-        run: npm run lint
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
 
-      - name: 🔨 Build TypeScript Project
+      - name: Setup Environment
+        uses: ./.github/actions/setup
+
+      - name: Build TypeScript Project
         run: npm run build
 
   semantic-release-check:
     name: Semantic Release Dry Run
     runs-on: ubuntu-latest
-    needs: code-quality
-
+    needs: [lint, typecheck, build]
     steps:
-      - name: 📥 Checkout Repository
+      - name: Checkout Repository
         uses: actions/checkout@v5
         with:
-          fetch-depth: 0 # Notwendig für `semantic-release`, um alle Tags zu holen
+          fetch-depth: 0 # Necessary for semantic-release
 
-      - name: 🔧 Set up Node.js
-        uses: actions/setup-node@v5
-        with:
-          node-version: 20
-          cache: "npm"
+      - name: Setup Environment
+        uses: ./.github/actions/setup
 
-      - name: 📦 Install Dependencies
-        run: npm ci
-
-      - name: 🔍 Dry-Run Semantic Release
+      - name: Dry-Run Semantic Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release --dry-run
-
-      - name: 📚 Dry-Run NPM Publish
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --dry-run

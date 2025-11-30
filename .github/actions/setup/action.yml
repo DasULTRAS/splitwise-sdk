@@ -1,0 +1,15 @@
+name: "Setup Node.js Environment"
+description: "Sets up Node.js and installs dependencies"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Node.js
+      uses: actions/setup-node@v5
+      with:
+        node-version: 24
+        cache: "npm"
+
+    - name: Install Dependencies
+      run: npm ci
+      shell: bash

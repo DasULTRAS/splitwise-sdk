@@ -23,6 +23,7 @@
     "lint": "eslint .",
     "build": "tsc",
     "prepare": "husky",
+    "check:format": "prettier --check .",
     "fix:format": "prettier --write ."
   },
   "lint-staged": {
