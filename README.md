@@ -22,6 +22,10 @@ sw.getCurrentUser()
   .catch((err) => console.error("Fehler:", err));
 ```
 
+## Architektur
+
+Eine detaillierte Beschreibung der Projektarchitektur, der Komponenten und des Entwicklungs-Workflows findest du in der [ARCHITEKTUR.md](ARCHITEKTUR.md).
+
 ## API-Endpunkte
 
 Das SDK unterstützt die meisten Endpunkte, die in der OpenAPI‑Definition der Splitwise API definiert sind, darunter:
@@ -47,6 +51,8 @@ Daher müssen alle Commits einem bestimmten [Format](https://github.com/angular/
 Wenn du magst, kann ich auch noch einen kurzen Beispiels-Commit oder weiterführende Hinweise ergänzen.
 
 ### **Typen aus OpenAPI generieren (optional)**
+
+> Download OpenAPI specification on [dev.splitwise.com](https://dev.splitwise.com)
 
 Falls du automatische Typdefinitionen aus der OpenAPI-Datei erstellen möchtest, kannst du das Tool [openapi-typescript](https://github.com/drwpow/openapi-typescript) verwenden.
 

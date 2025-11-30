@@ -19,30 +19,44 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --coverage",
     "lint": "eslint .",
-    "build": "tsc"
+    "build": "tsc",
+    "prepare": "husky",
+    "check:format": "prettier --check .",
+    "fix:format": "prettier --write ."
   },
-  "plugins": [
-    "@semantic-release/commit-analyzer",
-    "@semantic-release/release-notes-generator",
-    "@semantic-release/npm",
-    "@semantic-release/github"
-  ],
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "npm run lint",
+      "npm run fix:format"
+    ],
+    "*.{json,md}": [
+      "npm run fix:format"
+    ]
+  },
   "dependencies": {
     "oauth": "^0.10.2"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
     "@eslint/js": "^9.22.0",
     "@semantic-release/commit-analyzer": "^13.0.1",
-    "@semantic-release/github": "^11.0.1",
-    "@semantic-release/npm": "^12.0.1",
+    "@semantic-release/github": "^12.0.2",
+    "@semantic-release/npm": "^13.1.2",
     "@semantic-release/release-notes-generator": "^14.0.3",
-    "@types/node": "^22.13.10",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.10.1",
     "@types/oauth": "^0.9.6",
     "eslint": "^9.22.0",
     "globals": "^16.0.0",
-    "semantic-release": "^24.2.3",
+    "husky": "^9.1.7",
+    "jest": "^30.2.0",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.7.3",
+    "semantic-release": "^25.0.2",
+    "ts-jest": "^29.4.5",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.26.1"
   }

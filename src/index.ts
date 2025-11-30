@@ -25,7 +25,7 @@ export class SplitwiseClient {
         "https://secure.splitwise.com/", // Basis-URL
         "oauth/", // Autorisierungs-Pfad (anpassen falls nötig)
         "oauth/token", // Access-Token-Pfad (anpassen falls nötig)
-        undefined // Statt null: undefined
+        undefined, // Statt null: undefined
       );
     }
   }
@@ -58,7 +58,7 @@ export class SplitwiseClient {
     }
     if (!this.oauth2) {
       throw new Error(
-        "Consumer Key und Consumer Secret sind erforderlich, um einen Access Token abzurufen."
+        "Consumer Key und Consumer Secret sind erforderlich, um einen Access Token abzurufen.",
       );
     }
 
@@ -78,7 +78,7 @@ export class SplitwiseClient {
               reject(new Error("Token is undefined"));
             }
           }
-        }
+        },
       );
     });
 
@@ -96,7 +96,7 @@ export class SplitwiseClient {
   async request<T>(
     endpoint: string,
     method: HTTP_VERBS.GET | HTTP_VERBS.POST = HTTP_VERBS.GET,
-    body?: unknown
+    body?: unknown,
   ): Promise<T> {
     const token = await this.fetchAccessToken();
     const url = `${API_URL}${endpoint}`;
@@ -107,7 +107,7 @@ export class SplitwiseClient {
 
     this.log(
       LOG_LEVELS.INFO,
-      `Anfrage an ${url} (Methode: ${method}) wird ausgeführt.`
+      `Anfrage an ${url} (Methode: ${method}) wird ausgeführt.`,
     );
     const response = await fetch(url, {
       method,
@@ -117,7 +117,7 @@ export class SplitwiseClient {
     if (!response.ok) {
       const errorBody = await response.text();
       throw new Error(
-        `API-Anfrage fehlgeschlagen: ${response.status} ${response.statusText} – ${errorBody}`
+        `API-Anfrage fehlgeschlagen: ${response.status} ${response.statusText} – ${errorBody}`,
       );
     }
     return response.json() as T;
@@ -136,7 +136,7 @@ export class SplitwiseClient {
 
   async updateUser(
     id: number,
-    body: types.UpdateUserRequest
+    body: types.UpdateUserRequest,
   ): Promise<types.UpdateUserResponse> {
     return this.request(`update_user/${id}`, HTTP_VERBS.POST, body);
   }
@@ -151,7 +151,7 @@ export class SplitwiseClient {
   }
 
   async createGroup(
-    body: types.CreateGroupRequest
+    body: types.CreateGroupRequest,
   ): Promise<types.CreateGroupResponse> {
     return this.request("create_group", HTTP_VERBS.POST, body);
   }
@@ -165,7 +165,7 @@ export class SplitwiseClient {
   }
 
   async addUserToGroup(
-    body: types.AddUserToGroupRequest
+    body: types.AddUserToGroupRequest,
   ): Promise<types.AddUserToGroupResponse> {
     return this.request("add_user_to_group", HTTP_VERBS.POST, body);
   }
@@ -187,13 +187,13 @@ export class SplitwiseClient {
   }
 
   async createFriend(
-    body: types.CreateFriendRequest
+    body: types.CreateFriendRequest,
   ): Promise<types.CreateFriendResponse> {
     return this.request("create_friend", HTTP_VERBS.POST, body);
   }
 
   async createFriends(
-    body: types.CreateFriendsResponse
+    body: types.CreateFriendsResponse,
   ): Promise<types.CreateFriendsResponse> {
     return this.request("create_friends", HTTP_VERBS.POST, body);
   }
@@ -213,7 +213,7 @@ export class SplitwiseClient {
   }
 
   async getExpenses(
-    queryParams?: types.GetExpensesRequestParams
+    queryParams?: types.GetExpensesRequestParams,
   ): Promise<types.GetExpensesResponse> {
     let endpoint = "get_expenses";
     if (queryParams && Object.keys(queryParams).length > 0) {
@@ -223,7 +223,7 @@ export class SplitwiseClient {
   }
 
   async createExpense(
-    body: types.CreateExpenseRequest
+    body: types.CreateExpenseRequest,
   ): Promise<types.CreateExpenseResponse> {
     // body kann entweder vom Typ "equal_group_split" oder "by_shares" sein
     return this.request("create_expense", HTTP_VERBS.POST, body);
@@ -231,7 +231,7 @@ export class SplitwiseClient {
 
   async updateExpense(
     id: number,
-    body: types.UpdateExpenseRequest
+    body: types.UpdateExpenseRequest,
   ): Promise<types.UpdateExpenseResponse> {
     return this.request(`update_expense/${id}`, HTTP_VERBS.POST, body);
   }
