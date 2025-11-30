@@ -151,7 +151,6 @@ export interface paths {
     /**
      * List the current user's groups
      * @description **Note**: Expenses that are not associated with a group are listed in a group with ID 0.
-     *
      */
     get: {
       parameters: {
@@ -245,7 +244,6 @@ export interface paths {
      *     **Note**: group user parameters must be flattened into the format `users__{index}__{property}`, where
      *     `property` is `user_id`, `first_name`, `last_name`, or `email`.
      *     The user's email or ID must be provided.
-     *
      */
     post: {
       parameters: {
@@ -262,7 +260,6 @@ export interface paths {
              * @description What is the group used for?
              *
              *     **Note**: It is recommended to use `home` in place of `house` or `apartment`.
-             *
              * @example home
              * @enum {string}
              */
@@ -375,7 +372,6 @@ export interface paths {
      * @description Restores a deleted group.
      *
      *     **Note**: 200 OK does not indicate a successful response. You must check the `success` value of the response.
-     *
      */
     post: {
       parameters: {
@@ -422,7 +418,6 @@ export interface paths {
     /**
      * Add a user to a group
      * @description **Note**: 200 OK does not indicate a successful response. You must check the `success` value of the response.
-     *
      */
     post: {
       parameters: {
@@ -490,7 +485,6 @@ export interface paths {
      * @description Remove a user from a group. Does not succeed if the user has a non-zero balance.
      *
      *     **Note:** 200 OK does not indicate a successful response. You must check the success value of the response.
-     *
      */
     post: {
       parameters: {
@@ -542,7 +536,6 @@ export interface paths {
     /**
      * List current user's friends
      * @description **Note**: `group` objects only include group balances with that friend.
-     *
      */
     get: {
       parameters: {
@@ -635,7 +628,6 @@ export interface paths {
      * Add a friend
      * @description Adds a friend. If the other user does not exist, you must supply `user_first_name`.
      *     If the other user exists, `user_first_name` and `user_last_name` will be ignored.
-     *
      */
     post: {
       parameters: {
@@ -690,11 +682,10 @@ export interface paths {
      * Add friends
      * @description Add multiple friends at once.
      *
-     *     For each user, if the other user does not exist, you must supply `friends__{index}__first_name`.
+     *     For each user, if the other user does not exist, you must supply `users__{index}__first_name`.
      *
-     *     **Note**: user parameters must be flattened into the format `friends__{index}__{property}`, where
+     *     **Note**: user parameters must be flattened into the format `users__{index}__{property}`, where
      *     `property` is `first_name`, `last_name`, or `email`.
-     *
      */
     post: {
       parameters: {
@@ -705,12 +696,14 @@ export interface paths {
       };
       requestBody: {
         content: {
-          /** @example {
-           *       "friends__0__first_name": "Alan",
-           *       "friends__0__last_name": "Turing",
-           *       "friends__0__email": "alan@example.org",
-           *       "friends__1__email": "existing_user@example.com"
-           *     } */
+          /**
+           * @example {
+           *       "users__0__first_name": "Alan",
+           *       "users__0__last_name": "Turing",
+           *       "users__0__email": "alan@example.org",
+           *       "users__1__email": "existing_user@example.com"
+           *     }
+           */
           "application/json": {
             [key: string]: string;
           };
@@ -740,11 +733,13 @@ export interface paths {
             "application/json": {
               /** @example [] */
               users?: (components["schemas"]["friend"] & unknown)[];
-              /** @example {
+              /**
+               * @example {
                *       "base": [
                *         "Please supply a name for this user"
                *       ]
-               *     } */
+               *     }
+               */
               errors?: {
                 [key: string]: string[];
               };
@@ -774,7 +769,6 @@ export interface paths {
      * @description Given a friend ID, break off the friendship between the current user and the specified user.
      *
      *     **Note**: 200 OK does not indicate a successful response. You must check the `success` value of the response.
-     *
      */
     post: {
       parameters: {
@@ -824,7 +818,6 @@ export interface paths {
      * Supported currencies
      * @description Returns a list of all currencies allowed by the system. These are mostly ISO 4217 codes, but we do
      *     sometimes use pending codes or unofficial, colloquial codes (like BTC instead of XBT for Bitcoin).
-     *
      */
     get: {
       parameters: {
@@ -979,7 +972,6 @@ export interface paths {
      *     - `user_id`
      *
      *     **Note**: 200 OK does not indicate a successful response. The operation was successful only if `errors` is empty.
-     *
      */
     post: {
       parameters: {
@@ -1047,7 +1039,6 @@ export interface paths {
      *     shares for the expense will be overwritten with the provided values.
      *
      *     **Note**: 200 OK does not indicate a successful response. The operation was successful only if `errors` is empty.
-     *
      */
     post: {
       parameters: {
@@ -1099,7 +1090,6 @@ export interface paths {
     /**
      * Delete an expense
      * @description **Note**: 200 OK does not indicate a successful response. The operation was successful only if `success` is true.
-     *
      */
     post: {
       parameters: {
@@ -1147,7 +1137,6 @@ export interface paths {
     /**
      * Restore an expense
      * @description **Note**: 200 OK does not indicate a successful response. The operation was successful only if `success` is true.
-     *
      */
     post: {
       parameters: {
@@ -1374,7 +1363,6 @@ export interface paths {
      *     **Note**: While all parameters are optional, the server sets arbitrary (but large) limits
      *     on the number of notifications returned if you set a very old `updated_after` value or `limit` of `0` for a
      *     user with many notifications.
-     *
      */
     get: {
       parameters: {
@@ -1424,7 +1412,6 @@ export interface paths {
      * @description Returns a list of all categories Splitwise allows for expenses. There are parent categories that represent groups of categories with subcategories for more specific categorization.
      *     When creating expenses, you must use a subcategory, not a parent category.
      *     If you intend for an expense to be represented by the parent category and nothing more specific, please use the "Other" subcategory.
-     *
      */
     get: {
       parameters: {
@@ -1554,7 +1541,6 @@ export interface components {
        * @description What is the group used for?
        *
        *     **Note**: It is recommended to use `home` in place of `house` or `apartment`.
-       *
        * @example home
        * @enum {string}
        */
@@ -1724,14 +1710,14 @@ export interface components {
         | "fortnightly"
         | "monthly"
         | "yearly";
-      /** @description Whether a reminder will be sent to involved users in advance of the next occurrence of a recurring expense.
+      /**
+       * @description Whether a reminder will be sent to involved users in advance of the next occurrence of a recurring expense.
        *     Only applicable if the expense recurs.
-       *      */
+       */
       email_reminder: boolean;
       /**
        * @description Number of days in advance to remind involved users about the next occurrence of a new expense.
        *     Only applicable if the expense recurs.
-       *
        * @enum {integer|null}
        */
       email_reminder_in_advance?:

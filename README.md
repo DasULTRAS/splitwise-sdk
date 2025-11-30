@@ -71,7 +71,7 @@ Dadurch wird die Datei `api.json` aktualisiert und als `api_updated.json` gespei
 Nun können wir aus der bereinigten OpenAPI-Datei TypeScript-Typen generieren:
 
 ```bash
-npx openapi-typescript api_updated.json --output src/types/openapi-types.ts
+npx openapi-typescript openapi_updated.json --output src/types/openapi-types.ts
 ```
 
 Das erzeugt eine Datei `openapi-types.ts`, die die Schnittstellen für deine API enthält.
