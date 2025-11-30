@@ -1,6 +1,6 @@
 {
   "branches": ["main", { "name": "feat/*", "prerelease": "beta" }],
-  "repositoryUrl": "https://github.com/DasULTRAS/tax-tracker",
+  "repositoryUrl": "https://github.com/DasULTRAS/splitwise-sdk",
   "plugins": [
     [
       "@semantic-release/commit-analyzer",
