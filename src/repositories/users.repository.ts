@@ -35,7 +35,7 @@ export class UsersRepository extends BaseRepository {
     return this.http.post<PostUpdateUserByIdResponse>(
       `/update_user/${id}`,
       body,
-      "/get_user",
+      ["/get_user", "/get_current_user"],
     );
   }
 }

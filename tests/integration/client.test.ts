@@ -228,6 +228,68 @@ describe("Splitwise – Users Repository", () => {
     await sw.users.updateUser(1, { first_name: "Updated" });
     assert.deepEqual(capturedBody, { first_name: "Updated" });
   });
+
+  it("should invalidate get_current_user cache after update", async (t) => {
+    const cachedSw = new Splitwise({
+      accessToken: "test-token",
+      logger: new SilentLogger(),
+      retry: { maxRetries: 0 },
+      cache: { enabled: true, defaultTtlMs: 60_000 },
+    });
+
+    let currentFirstName = "Before";
+    let currentUserFetchCount = 0;
+
+    globalThis.fetch = (async (url: unknown, init?: RequestInit) => {
+      const method = init?.method ?? "GET";
+      const path = new URL(String(url)).pathname;
+
+      if (method === "GET" && path.endsWith("/get_current_user")) {
+        currentUserFetchCount++;
+        return {
+          ok: true,
+          status: 200,
+          headers: new Headers(),
+          json: async () => ({ user: { id: 1, first_name: currentFirstName } }),
+        };
+      }
+
+      if (method === "POST" && path.endsWith("/update_user/1")) {
+        const payload = JSON.parse((init?.body as string) ?? "{}") as {
+          first_name?: string;
+        };
+        if (payload.first_name) {
+          currentFirstName = payload.first_name;
+        }
+        return {
+          ok: true,
+          status: 200,
+          headers: new Headers(),
+          json: async () => ({ user: { id: 1, first_name: currentFirstName } }),
+        };
+      }
+
+      return {
+        ok: false,
+        status: 404,
+        headers: new Headers(),
+        json: async () => ({ errors: { base: ["Not found"] } }),
+        text: async () => '{"errors":{"base":["Not found"]}}',
+      };
+    }) as unknown as typeof globalThis.fetch;
+    t.after(() => {
+      globalThis.fetch = originalFetch;
+    });
+
+    const before = await cachedSw.users.getCurrentUser();
+    assert.equal(before.user?.first_name, "Before");
+
+    await cachedSw.users.updateUser(1, { first_name: "After" });
+
+    const after = await cachedSw.users.getCurrentUser();
+    assert.equal(after.user?.first_name, "After");
+    assert.equal(currentUserFetchCount, 2);
+  });
 });
 
 describe("Splitwise – Expenses Repository", () => {
