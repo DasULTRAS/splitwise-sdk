@@ -3,12 +3,6 @@
  *
  * This example imports from src directly so you can test current changes
  * without building dist first.
- *
- * Usage (PowerShell):
- *   Add SPLITWISE_TOKEN or SPLITWISE_API_KEY to .env
- *   OR
- *   $env:SPLITWISE_TOKEN = "your_access_token"
- *   npx tsx examples/local-smoke.ts
  */
 import { AuthenticationError, SilentLogger, Splitwise } from "../src/index.js";
 import { getExampleToken } from "./_env.js";
