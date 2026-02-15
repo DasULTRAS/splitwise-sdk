@@ -1,16 +1,21 @@
 # Splitwise SDK
 
+![npm](https://img.shields.io/npm/v/splitwise-sdk)
+![node](https://img.shields.io/node/v/splitwise-sdk)
+![license](https://img.shields.io/npm/l/splitwise-sdk)
+![downloads](https://img.shields.io/npm/dm/splitwise-sdk)
+
 Ein typsicheres, SDK für die [Splitwise API v3.0](https://dev.splitwise.com/) in Node.js.
 
 ## Features
 
-- **Generator-first**: Typen und Client-Code werden automatisch aus der OpenAPI-Spezifikation generiert
+- **Generatored types**: Typen werden automatisch aus der OpenAPI-Spezifikation generiert
 - **Repository-Pattern**: Ressourcen-basierte Module für alle API-Endpunkte
 - **Typed Error Hierarchy**: Strukturierte Fehlerklassen für jeden HTTP-Statuscode
 - **Retry mit Exponential Backoff**: Automatisches Retry für transiente Fehler (429, 5xx, Netzwerkfehler)
 - **In-Memory Caching**: TTL-basierter Cache mit Request-Deduplication
 - **Dual-Format**: ESM + CJS + TypeScript Declarations
-- **Zero Runtime Dependencies**: Kein `oauth`, kein `axios` – nur native `fetch`
+- **Zero Runtime Dependencies**: nur native `fetch`
 
 ## Installation
 
@@ -173,4 +178,4 @@ Dies führt `@hey-api/openapi-ts` aus und generiert den typisierten Client in `s
 
 ## Lizenz
 
-MIT
+[MIT](LICENSE)
