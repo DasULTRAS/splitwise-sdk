@@ -99,7 +99,7 @@ export class HttpClient {
   async post<T>(
     endpoint: string,
     body?: unknown,
-    invalidatePrefix?: string,
+    invalidatePrefix?: string | ReadonlyArray<string>,
   ): Promise<T> {
     const result = await executeWithInterceptors<T>(
       this.interceptorContext,
@@ -115,7 +115,12 @@ export class HttpClient {
 
     // Invalidate related cached GET results
     if (invalidatePrefix) {
-      this.cache.invalidate(invalidatePrefix);
+      const prefixes = Array.isArray(invalidatePrefix)
+        ? invalidatePrefix
+        : [invalidatePrefix];
+      for (const prefix of prefixes) {
+        this.cache.invalidate(prefix);
+      }
     }
 
     return result;
