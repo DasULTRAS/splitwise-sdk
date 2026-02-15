@@ -9,7 +9,7 @@ Dieses Dokument beschreibt alle Breaking Changes beim Upgrade auf die neue Major
 3. **Repository-Pattern**: Flache Methoden → verschachtelte Repositories
 4. **Typen aus Generated Code**: `src/types/api.ts` entfernt
 5. **Neues Logging**: Console-Callback → strukturiertes Logger-Interface
-6. **Node.js >= 18**: Minimum-Version angehoben
+6. **Node.js >= 20.19.0**: Minimum-Version angehoben
 
 ## 1. Client-Instanzierung
 
@@ -187,4 +187,4 @@ Logs sind jetzt strukturiert (JSON) und enthalten `requestId`, `durationMs`, `re
 ## 7. Node.js-Version
 
 - **Vorher**: Keine explizite Mindestversion
-- **Nachher**: `node >= 18` (für native `fetch` und `node:test`)
+- **Nachher**: `node >= 20.19.0` (für native `fetch` und `node:test`)

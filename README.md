@@ -18,7 +18,7 @@ Ein typsicheres, SDK für die [Splitwise API v3.0](https://dev.splitwise.com/) i
 npm install splitwise-sdk
 ```
 
-**Voraussetzung:** Node.js >= 18
+**Voraussetzung:** Node.js >= 20.19.0
 
 ## Quickstart
 
@@ -139,7 +139,7 @@ try {
 
 ### Voraussetzungen
 
-- Node.js >= 18
+- Node.js >= 20.19.0
 - npm
 
 ### Setup
