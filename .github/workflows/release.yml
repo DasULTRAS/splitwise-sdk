@@ -1,47 +1,169 @@
 name: Release
+
 on:
-  workflow_run:
-    workflows: ["Code-Quality"]
-    types:
-      - completed
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run (no actual release)"
+        required: false
+        type: boolean
+        default: false
 
 permissions:
-  contents: read # for checkout
+  contents: write
+  issues: write
+  pull-requests: write
+  id-token: write
+
+concurrency:
+  group: release-main
+  cancel-in-progress: false
 
 jobs:
-  on-success:
-    runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    steps:
-      - run: echo "First workflow was a success"
-
   release:
     name: Release
     runs-on: ubuntu-latest
-    needs: on-success
-    permissions:
-      contents: write # to be able to publish a GitHub release
-      issues: write # to be able to comment on released issues
-      pull-requests: write # to be able to comment on released pull requests
-      id-token: write # to enable use of OIDC for npm provenance
+    if: ${{ github.ref == 'refs/heads/main' }}
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Setup Environment
         uses: ./.github/actions/setup
 
-      - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
+      - name: Verify dependency signatures
         run: npm audit signatures
 
       - name: Build package
         run: npm run build
 
-      - name: Release
+      - name: Remember latest tag before release
+        id: tags_before
+        shell: bash
+        run: |
+          git fetch --force --tags
+          before_tag="$(git describe --tags --abbrev=0 2>/dev/null || true)"
+          echo "before_tag=$before_tag" >> "$GITHUB_OUTPUT"
+
+      - name: Validate package version is in sync with latest release
+        if: ${{ !inputs.dry_run }}
+        shell: bash
+        run: |
+          package_version="$(node -p "require('./package.json').version")"
+          latest_tag="${{ steps.tags_before.outputs.before_tag }}"
+
+          if [ -z "$latest_tag" ]; then
+            echo "No previous tag found. Skipping drift validation."
+            exit 0
+          fi
+
+          latest_version="${latest_tag#v}"
+          if [ "$package_version" != "$latest_version" ]; then
+            echo "package.json version ($package_version) does not match latest release tag version ($latest_version)."
+            echo "Please merge/open the version-sync PR before creating a new release."
+            exit 1
+          fi
+
+      - name: Run semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npx semantic-release
+        run: |
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            npx semantic-release --dry-run --no-ci
+          else
+            npx semantic-release
+          fi
+
+      - name: Detect released version
+        if: ${{ !inputs.dry_run }}
+        id: release_result
+        shell: bash
+        run: |
+          git fetch --force --tags
+          before_tag="${{ steps.tags_before.outputs.before_tag }}"
+          after_tag="$(git describe --tags --abbrev=0 2>/dev/null || true)"
+
+          if [ -n "$after_tag" ] && [ "$after_tag" != "$before_tag" ]; then
+            echo "released=true" >> "$GITHUB_OUTPUT"
+            echo "tag=$after_tag" >> "$GITHUB_OUTPUT"
+            echo "version=${after_tag#v}" >> "$GITHUB_OUTPUT"
+          else
+            echo "released=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Update package version files
+        if: ${{ !inputs.dry_run && steps.release_result.outputs.released == 'true' }}
+        shell: bash
+        run: |
+          target_version="${{ steps.release_result.outputs.version }}"
+          TARGET_VERSION="$target_version" node -e '
+            const fs = require("fs");
+            const version = process.env.TARGET_VERSION;
+            const pkgPath = "package.json";
+            const lockPath = "package-lock.json";
+
+            const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf8"));
+            pkg.version = version;
+            fs.writeFileSync(pkgPath, `${JSON.stringify(pkg, null, 2)}\n`);
+
+            if (fs.existsSync(lockPath)) {
+              const lock = JSON.parse(fs.readFileSync(lockPath, "utf8"));
+              lock.version = version;
+              if (lock.packages && lock.packages[""]) {
+                lock.packages[""].version = version;
+              }
+              fs.writeFileSync(lockPath, `${JSON.stringify(lock, null, 2)}\n`);
+            }
+          '
+          updated_version="$(node -p "require('./package.json').version")"
+          if [ "$updated_version" != "${{ steps.release_result.outputs.version }}" ]; then
+            echo "package.json version ($updated_version) differs from released version (${{ steps.release_result.outputs.version }})."
+            exit 1
+          fi
+
+      - name: Create version sync PR
+        if: ${{ !inputs.dry_run && steps.release_result.outputs.released == 'true' }}
+        id: version_pr
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.RELEASE_PR_TOKEN || secrets.GITHUB_TOKEN }}
+          commit-message: "chore(release): sync package version to ${{ steps.release_result.outputs.version }}"
+          branch: "chore/release-version-v${{ steps.release_result.outputs.version }}"
+          delete-branch: true
+          title: "chore(release): sync package version to ${{ steps.release_result.outputs.version }}"
+          body: |
+            Syncs `package.json` and `package-lock.json` to released version `${{ steps.release_result.outputs.version }}`.
+
+            Created automatically by `release.yml`.
+          labels: |
+            release
+            automated
+
+      - name: Enable auto-merge for version PR
+        if: ${{ !inputs.dry_run && steps.version_pr.outputs.pull-request-number != '' }}
+        continue-on-error: true
+        uses: peter-evans/enable-pull-request-automerge@v3
+        with:
+          token: ${{ secrets.RELEASE_PR_TOKEN || secrets.GITHUB_TOKEN }}
+          pull-request-number: ${{ steps.version_pr.outputs.pull-request-number }}
+          merge-method: squash
+
+      - name: Release summary
+        if: ${{ !inputs.dry_run }}
+        shell: bash
+        run: |
+          if [ "${{ steps.release_result.outputs.released }}" = "true" ]; then
+            echo "Released tag: ${{ steps.release_result.outputs.tag }}"
+            if [ -n "${{ steps.version_pr.outputs.pull-request-url }}" ]; then
+              echo "Version sync PR: ${{ steps.version_pr.outputs.pull-request-url }}"
+            else
+              echo "No version sync PR created."
+            fi
+          else
+            echo "No release created (no releasable commits)."
+          fi
