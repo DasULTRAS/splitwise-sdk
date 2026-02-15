@@ -7,3 +7,6 @@ node_modules/
 # Generated files
 coverage/
 openapi_updated.json
+
+# Environment variables
+.env

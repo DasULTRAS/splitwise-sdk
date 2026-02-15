@@ -1,0 +1,9 @@
+export { BaseRepository } from "./base.repository.js";
+export { CategoriesRepository } from "./categories.repository.js";
+export { CommentsRepository } from "./comments.repository.js";
+export { CurrenciesRepository } from "./currencies.repository.js";
+export { ExpensesRepository } from "./expenses.repository.js";
+export { FriendsRepository } from "./friends.repository.js";
+export { GroupsRepository } from "./groups.repository.js";
+export { NotificationsRepository } from "./notifications.repository.js";
+export { UsersRepository } from "./users.repository.js";
