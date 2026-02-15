@@ -18,8 +18,22 @@ jobs:
 
       - name: Verify OpenAPI generated files are in sync
         run: |
-          npm run generate
+          npm run typegen
           git diff --exit-code
+
+  signatures:
+    name: Verify Dependency Signatures
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup
+      
+      - name: Verify dependency signatures
+        run: npm audit signatures
+
 
   lint:
     name: Lint

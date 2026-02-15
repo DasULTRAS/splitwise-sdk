@@ -34,9 +34,6 @@ jobs:
       - name: Setup Environment
         uses: ./.github/actions/setup
 
-      - name: Verify dependency signatures
-        run: npm audit signatures
-
       - name: Build package
         run: npm run build
 
