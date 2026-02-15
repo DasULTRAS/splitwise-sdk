@@ -131,6 +131,7 @@ export type { LogEntry, Logger, LogLevel } from "./core/logger.js";
 export type { TokenProvider } from "./core/auth.js";
 
 // Config types
+export type { HttpClientConfig } from "./core/http-client.js";
 export type { CacheConfig } from "./utils/cache.js";
 export type { RetryConfig } from "./utils/retry.js";
 
