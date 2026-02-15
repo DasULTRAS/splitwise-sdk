@@ -113,7 +113,36 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Dry-Run Semantic Release
+        id: semantic_release_dry_run
+        shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npx semantic-release --dry-run
+        run: |
+          set -euo pipefail
+
+          log_file="$(mktemp)"
+          npx semantic-release --dry-run --no-ci 2>&1 | tee "$log_file"
+
+          next_version="$(
+            sed -nE 's/.*The next release version is ([0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.]+)?).*/\1/p' "$log_file" | tail -n1
+          )"
+
+          if [ -n "$next_version" ]; then
+            echo "next_version=$next_version" >> "$GITHUB_OUTPUT"
+          else
+            echo "next_version=" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: PR Overview
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          {
+            echo "## PR Overview"
+            if [ -n "${{ steps.semantic_release_dry_run.outputs.next_version }}" ]; then
+              echo "- Semantic-release dry-run next version: \`${{ steps.semantic_release_dry_run.outputs.next_version }}\`"
+            else
+              echo "- Semantic-release dry-run next version: _none (no releasable changes)_"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
