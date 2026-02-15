@@ -1,6 +1,6 @@
 {
   "name": "splitwise-sdk",
-  "version": "0.0.0",
+  "version": "1.6.0",
   "description": "Splitwise API SDK for Node.js",
   "repository": {
     "type": "git",
@@ -33,7 +33,7 @@
     "LICENSE"
   ],
   "engines": {
-    "node": ">=18"
+    "node": ">=20.19.0"
   },
   "scripts": {
     "build": "tsup",
