@@ -161,6 +161,31 @@ export class NetworkError extends SplitwiseError {
 }
 
 /**
+ * Parse a Retry-After header value into seconds.
+ * Supports both numeric seconds and HTTP-Date format (RFC 9110 §10.2.3).
+ */
+export function parseRetryAfter(
+  header: string | null | undefined,
+): number | undefined {
+  if (!header) return undefined;
+
+  // Try numeric seconds first
+  const seconds = Number(header);
+  if (!isNaN(seconds) && seconds >= 0) {
+    return seconds;
+  }
+
+  // Try HTTP-Date
+  const date = new Date(header);
+  if (!isNaN(date.getTime())) {
+    const diffMs = date.getTime() - Date.now();
+    return Math.max(0, Math.ceil(diffMs / 1000));
+  }
+
+  return undefined;
+}
+
+/**
  * Parse an HTTP response into the appropriate error class.
  */
 export function parseHttpError(
@@ -183,15 +208,8 @@ export function parseHttpError(
     case 409:
       return new ConflictError(endpoint, requestId, body);
     case 429: {
-      const retryAfter = retryAfterHeader
-        ? Number(retryAfterHeader)
-        : undefined;
-      return new RateLimitError(
-        endpoint,
-        requestId,
-        retryAfter !== undefined && !isNaN(retryAfter) ? retryAfter : undefined,
-        body,
-      );
+      const retryAfter = parseRetryAfter(retryAfterHeader);
+      return new RateLimitError(endpoint, requestId, retryAfter, body);
     }
     default:
       return new SplitwiseApiError(

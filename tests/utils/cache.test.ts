@@ -103,6 +103,19 @@ describe("RequestCache", () => {
       assert.equal(cache.get(key2), undefined);
       assert.equal(cache.get(key3), "c"); // unaffected
     });
+
+    it("should not over-invalidate similar endpoint names", () => {
+      const keyGroup = cache.buildKey("/get_group", undefined, "fp");
+      const keyGroups = cache.buildKey("/get_groups", undefined, "fp");
+
+      cache.set(keyGroup, "single", "/get_group");
+      cache.set(keyGroups, "list", "/get_groups");
+
+      cache.invalidate("/get_group");
+
+      assert.equal(cache.get(keyGroup), undefined); // invalidated
+      assert.equal(cache.get(keyGroups), "list"); // NOT invalidated
+    });
   });
 
   describe("clear", () => {
@@ -184,6 +197,57 @@ describe("RequestCache", () => {
       // Wait for TTL to expire
       await new Promise((r) => setTimeout(r, 10));
       assert.equal(c.get(key), undefined);
+
+      c.dispose();
+    });
+  });
+
+  describe("dispose", () => {
+    it("should clear all entries and stop sweep timer", () => {
+      const c = new RequestCache({ ...DEFAULT_CACHE_CONFIG });
+      const key = c.buildKey("/test", undefined, "fp");
+      c.set(key, "data", "/test");
+      c.dispose();
+      assert.equal(c.get(key), undefined);
+    });
+
+    it("should be safe to call multiple times", () => {
+      const c = new RequestCache({ ...DEFAULT_CACHE_CONFIG });
+      c.dispose();
+      c.dispose(); // should not throw
+    });
+  });
+
+  describe("sweep", () => {
+    it("should remove expired entries during sweep", async () => {
+      const c = new RequestCache({
+        enabled: true,
+        defaultTtlMs: 1, // 1ms TTL
+      });
+
+      const key1 = c.buildKey("/a", undefined, "fp");
+      const key2 = c.buildKey("/b", undefined, "fp");
+      c.set(key1, "expired", "/a");
+      c.set(key2, "expired", "/b");
+
+      // Wait for entries to expire
+      await new Promise((r) => setTimeout(r, 10));
+
+      // Add a non-expired entry
+      const c2 = new RequestCache({
+        enabled: true,
+        defaultTtlMs: 60_000,
+      });
+      const key3 = c2.buildKey("/c", undefined, "fp");
+      c2.set(key3, "fresh", "/c");
+
+      // Expired entries should return undefined on get
+      assert.equal(c.get(key1), undefined);
+      assert.equal(c.get(key2), undefined);
+      assert.equal(c2.get(key3), "fresh");
+
+      c.dispose();
+      c2.dispose();
     });
   });
 });

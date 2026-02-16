@@ -20,7 +20,10 @@ function mockFetch(
     ok: status >= 200 && status < 300,
     status,
     statusText: status === 200 ? "OK" : "Error",
-    headers: new Headers(headers ?? {}),
+    headers: new Headers({
+      ...(status !== 204 ? { "content-type": "application/json" } : {}),
+      ...headers,
+    }),
     json: async () => body,
     text: async () => JSON.stringify(body),
   })) as unknown as typeof globalThis.fetch;
@@ -162,8 +165,9 @@ describe("Splitwise Client", () => {
       return {
         ok: true,
         status: 200,
-        headers: new Headers(),
+        headers: new Headers({ "content-type": "application/json" }),
         json: async () => ({ user: { id: 1 } }),
+        text: async () => '{"user":{"id":1}}',
       };
     }) as unknown as typeof globalThis.fetch;
     t.after(() => {
@@ -217,8 +221,9 @@ describe("Splitwise – Users Repository", () => {
       return {
         ok: true,
         status: 200,
-        headers: new Headers(),
+        headers: new Headers({ "content-type": "application/json" }),
         json: async () => ({ id: 1, first_name: "Updated" }),
+        text: async () => '{"id":1,"first_name":"Updated"}',
       };
     }) as unknown as typeof globalThis.fetch;
     t.after(() => {
@@ -249,8 +254,10 @@ describe("Splitwise – Users Repository", () => {
         return {
           ok: true,
           status: 200,
-          headers: new Headers(),
+          headers: new Headers({ "content-type": "application/json" }),
           json: async () => ({ user: { id: 1, first_name: currentFirstName } }),
+          text: async () =>
+            JSON.stringify({ user: { id: 1, first_name: currentFirstName } }),
         };
       }
 
@@ -264,8 +271,10 @@ describe("Splitwise – Users Repository", () => {
         return {
           ok: true,
           status: 200,
-          headers: new Headers(),
+          headers: new Headers({ "content-type": "application/json" }),
           json: async () => ({ user: { id: 1, first_name: currentFirstName } }),
+          text: async () =>
+            JSON.stringify({ user: { id: 1, first_name: currentFirstName } }),
         };
       }
 
@@ -313,8 +322,9 @@ describe("Splitwise – Expenses Repository", () => {
       return {
         ok: true,
         status: 200,
-        headers: new Headers(),
+        headers: new Headers({ "content-type": "application/json" }),
         json: async () => ({ expenses: [] }),
+        text: async () => '{"expenses":[]}',
       };
     }) as unknown as typeof globalThis.fetch;
     t.after(() => {
@@ -367,8 +377,9 @@ describe("Splitwise – Retry behavior", () => {
       return {
         ok: true,
         status: 200,
-        headers: new Headers(),
+        headers: new Headers({ "content-type": "application/json" }),
         json: async () => ({ user: { id: 1 } }),
+        text: async () => '{"user":{"id":1}}',
       };
     }) as unknown as typeof globalThis.fetch;
     t.after(() => {

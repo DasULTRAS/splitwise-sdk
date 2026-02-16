@@ -16,7 +16,7 @@ Das Splitwise SDK folgt einem Generator-first-Ansatz: Der gesamte API-Client und
 │  http-client · auth · errors · interceptors │
 ├────────────────────────────────────────────┤
 │        Utils        │  Generated Client     │
-│  retry · cache      │  types · sdk · client  │
+│  retry · cache      │  types                 │
 ├─────────────────────┴──────────────────────┤
 │              Node.js fetch                  │
 └────────────────────────────────────────────┘
@@ -27,7 +27,7 @@ Das Splitwise SDK folgt einem Generator-first-Ansatz: Der gesamte API-Client und
 ### 1. Generated Client (`src/generated/`)
 
 - **Quelle**: `openapi.json` → `@hey-api/openapi-ts`
-- **Dateien**: `types.gen.ts`, `sdk.gen.ts`, `client.gen.ts`
+- **Dateien**: `types.gen.ts`
 - **Regel**: Niemals manuell editieren. Regenerieren via `npm run typegen`.
 
 ### 2. Core Layer (`src/core/`)

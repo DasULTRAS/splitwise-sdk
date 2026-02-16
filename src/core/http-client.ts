@@ -83,7 +83,7 @@ export class HttpClient {
     return this.cache.dedup(cacheKey, async () => {
       const url = this.buildUrl(endpoint, params);
       const result = await executeWithInterceptors<T>(
-        this.interceptorContext,
+        { ...this.interceptorContext, resolvedToken: token },
         "GET",
         endpoint,
         (headers) => fetch(url, { method: "GET", headers }),
@@ -131,6 +131,13 @@ export class HttpClient {
    */
   clearCache(): void {
     this.cache.clear();
+  }
+
+  /**
+   * Dispose the client: stop background timers and clear cache.
+   */
+  dispose(): void {
+    this.cache.dispose();
   }
 
   private buildUrl(endpoint: string, params?: Record<string, unknown>): string {
