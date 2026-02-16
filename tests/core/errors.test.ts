@@ -7,6 +7,7 @@ import {
   NetworkError,
   NotFoundError,
   parseHttpError,
+  parseRetryAfter,
   RateLimitError,
   SplitwiseApiError,
   SplitwiseError,
@@ -166,6 +167,18 @@ describe("parseHttpError", () => {
     assert.equal((err as RateLimitError).retryAfter, 60);
   });
 
+  it("should return RateLimitError for 429 with HTTP-Date Retry-After", () => {
+    const futureDate = new Date(Date.now() + 120_000).toUTCString();
+    const err = parseHttpError(429, "/api", "r1", {}, futureDate);
+    assert.ok(err instanceof RateLimitError);
+    const retryAfter = (err as RateLimitError).retryAfter!;
+    // Should be approximately 120 seconds (allow some tolerance)
+    assert.ok(
+      retryAfter >= 118 && retryAfter <= 121,
+      `Expected ~120, got ${retryAfter}`,
+    );
+  });
+
   it("should return RateLimitError for 429 without Retry-After", () => {
     const err = parseHttpError(429, "/api", "r1", {}, null);
     assert.ok(err instanceof RateLimitError);
@@ -177,5 +190,34 @@ describe("parseHttpError", () => {
     assert.ok(err instanceof SplitwiseApiError);
     assert.equal(err.status, 503);
     assert.equal(err.retryable, true);
+  });
+});
+
+describe("parseRetryAfter", () => {
+  it("should return undefined for null/undefined", () => {
+    assert.equal(parseRetryAfter(null), undefined);
+    assert.equal(parseRetryAfter(undefined), undefined);
+    assert.equal(parseRetryAfter(""), undefined);
+  });
+
+  it("should parse numeric seconds", () => {
+    assert.equal(parseRetryAfter("60"), 60);
+    assert.equal(parseRetryAfter("0"), 0);
+    assert.equal(parseRetryAfter("120"), 120);
+  });
+
+  it("should parse HTTP-Date format", () => {
+    const futureDate = new Date(Date.now() + 60_000).toUTCString();
+    const result = parseRetryAfter(futureDate)!;
+    assert.ok(result >= 58 && result <= 61, `Expected ~60, got ${result}`);
+  });
+
+  it("should return 0 for past HTTP-Date", () => {
+    const pastDate = new Date(Date.now() - 10_000).toUTCString();
+    assert.equal(parseRetryAfter(pastDate), 0);
+  });
+
+  it("should return undefined for invalid value", () => {
+    assert.equal(parseRetryAfter("not-a-date-or-number"), undefined);
   });
 });

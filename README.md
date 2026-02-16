@@ -161,7 +161,7 @@ npm ci
 | `npm test`             | Tests mit node:test + c8 Coverage      |
 | `npm run typegen`      | Generiert Client-Code aus openapi.json |
 | `npm run check:type`   | TypeScript Typecheck                   |
-| `npm run check:lint`   | ESLint                                 |
+| `npm run check:lint`   | Oxlint                                 |
 | `npm run check:format` | Prettier Check                         |
 
 ### Semantic Commits

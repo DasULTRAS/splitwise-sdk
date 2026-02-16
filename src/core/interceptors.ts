@@ -20,6 +20,8 @@ export interface InterceptorContext {
   tokenProvider: TokenProvider;
   logger: Logger;
   retry: RetryConfig;
+  /** Pre-resolved token to avoid redundant resolution (e.g. for cache-key consistency). */
+  resolvedToken?: string;
 }
 
 /**
@@ -41,7 +43,8 @@ export async function executeWithInterceptors<T>(
     const startTime = performance.now();
 
     try {
-      const token = await resolveToken(ctx.tokenProvider);
+      const token =
+        ctx.resolvedToken ?? (await resolveToken(ctx.tokenProvider));
       const headers: Record<string, string> = {
         Authorization: bearerHeader(token),
         "Content-Type": "application/json",
@@ -70,7 +73,30 @@ export async function executeWithInterceptors<T>(
           durationMs,
           retryCount: attempt,
         });
-        return (await response.json()) as T;
+
+        // 204 No Content or empty body → return undefined
+        if (
+          response.status === 204 ||
+          response.headers.get("content-length") === "0"
+        ) {
+          return undefined as T;
+        }
+
+        // Parse JSON when Content-Type indicates it
+        const contentType = response.headers.get("content-type") ?? "";
+        if (contentType.includes("application/json")) {
+          return (await response.json()) as T;
+        }
+
+        // Fallback: try JSON, fall back to text
+        const text = await response.text();
+        if (!text) return undefined as T;
+
+        try {
+          return JSON.parse(text) as T;
+        } catch {
+          return text as T;
+        }
       }
 
       // Non-OK response → parse into typed error

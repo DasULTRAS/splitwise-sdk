@@ -95,6 +95,11 @@ export class Splitwise {
   clearCache(): void {
     this.http.clearCache();
   }
+
+  /** Dispose the client: stop background timers and clear cache. */
+  dispose(): void {
+    this.http.dispose();
+  }
 }
 
 // ── Helpers ──────────────────────────────────────────────────────────

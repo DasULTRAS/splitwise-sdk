@@ -35,8 +35,36 @@ interface CacheEntry<T = unknown> {
 export class RequestCache {
   private readonly cache = new Map<string, CacheEntry>();
   private readonly inflight = new Map<string, Promise<unknown>>();
+  private sweepTimer?: ReturnType<typeof setInterval>;
 
-  constructor(private readonly config: CacheConfig) {}
+  constructor(private readonly config: CacheConfig) {
+    if (config.enabled) {
+      this.sweepTimer = setInterval(() => this.sweep(), 60_000);
+      // Unref so the timer does not keep the Node.js process alive
+      if (typeof this.sweepTimer === "object" && "unref" in this.sweepTimer) {
+        this.sweepTimer.unref();
+      }
+    }
+  }
+
+  /** Remove all expired entries. */
+  private sweep(): void {
+    const now = Date.now();
+    for (const [key, entry] of this.cache) {
+      if (now > entry.expiresAt) {
+        this.cache.delete(key);
+      }
+    }
+  }
+
+  /** Stop the sweep timer and clear all entries. Call when discarding the client. */
+  dispose(): void {
+    if (this.sweepTimer) {
+      clearInterval(this.sweepTimer);
+      this.sweepTimer = undefined;
+    }
+    this.clear();
+  }
 
   /**
    * Build a cache key that is token-specific.
@@ -106,12 +134,24 @@ export class RequestCache {
   }
 
   /**
-   * Invalidate all cache entries whose key contains the given resource prefix.
-   * Called after mutating operations.
+   * Invalidate all cache entries whose endpoint matches the given resource prefix.
+   * Uses structural matching on the endpoint part of the cache key to avoid
+   * over-invalidation (e.g. "/get_group" does not match "/get_groups").
    */
   invalidate(resourcePrefix: string): void {
     for (const key of this.cache.keys()) {
-      if (key.includes(resourcePrefix)) {
+      // Cache-key format: "<fingerprint>:<endpoint>:<params>"
+      const firstColon = key.indexOf(":");
+      const secondColon = key.indexOf(":", firstColon + 1);
+      const endpointPart = key.substring(
+        firstColon + 1,
+        secondColon === -1 ? undefined : secondColon,
+      );
+
+      if (
+        endpointPart === resourcePrefix ||
+        endpointPart.startsWith(resourcePrefix + "/")
+      ) {
         this.cache.delete(key);
       }
     }
