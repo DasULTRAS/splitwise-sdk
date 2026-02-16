@@ -4,8 +4,29 @@ on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - main
 
 jobs:
+  pr-title:
+    name: PR Title Convention
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup
+
+      - name: Validate PR title with commitlint
+        shell: bash
+        run: |
+          title="${{ github.event.pull_request.title }}"
+          echo "PR title: $title"
+          echo "$title" | npx commitlint --verbose
+
   generated-sync:
     name: Generated Sync
     runs-on: ubuntu-latest
