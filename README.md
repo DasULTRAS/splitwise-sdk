@@ -5,17 +5,17 @@
 ![license](https://img.shields.io/npm/l/splitwise-sdk)
 ![downloads](https://img.shields.io/npm/dm/splitwise-sdk)
 
-Ein typsicheres, SDK für die [Splitwise API v3.0](https://dev.splitwise.com/) in Node.js.
+Type-safe Node.js SDK for the [Splitwise API v3.0](https://dev.splitwise.com/).
 
 ## Features
 
-- **Generatored types**: Typen werden automatisch aus der OpenAPI-Spezifikation generiert
-- **Repository-Pattern**: Ressourcen-basierte Module für alle API-Endpunkte
-- **Typed Error Hierarchy**: Strukturierte Fehlerklassen für jeden HTTP-Statuscode
-- **Retry mit Exponential Backoff**: Automatisches Retry für transiente Fehler (429, 5xx, Netzwerkfehler)
-- **In-Memory Caching**: TTL-basierter Cache mit Request-Deduplication
-- **Dual-Format**: ESM + CJS + TypeScript Declarations
-- **Zero Runtime Dependencies**: nur native `fetch`
+- **Generated types** — auto-generated from the OpenAPI spec
+- **Repository pattern** — resource-based modules for all endpoints
+- **Typed error hierarchy** — specific error classes per HTTP status code
+- **Retry with exponential backoff** — auto-retry for transient errors (429, 5xx, network)
+- **In-memory caching** — TTL-based cache with request deduplication
+- **Dual format** — ESM + CJS + TypeScript declarations
+- **Zero runtime dependencies** — native `fetch` only
 
 ## Installation
 
@@ -23,23 +23,23 @@ Ein typsicheres, SDK für die [Splitwise API v3.0](https://dev.splitwise.com/) i
 npm install splitwise-sdk
 ```
 
-**Voraussetzung:** Node.js >= 20.19.0
+**Requires:** Node.js >= 20.19.0
 
-## Quickstart
+## Quick Start
 
 ```typescript
 import { Splitwise } from "splitwise-sdk";
 
 const sw = new Splitwise({ accessToken: "your_access_token" });
 
-// Aktuellen Benutzer abrufen
+// Get current user
 const { user } = await sw.users.getCurrentUser();
 console.log(user?.first_name);
 
-// Ausgaben einer Gruppe laden
+// List group expenses
 const { expenses } = await sw.expenses.getExpenses({ group_id: 123 });
 
-// Neue Ausgabe erstellen
+// Create an expense
 await sw.expenses.createExpense({
   cost: "25.00",
   description: "Dinner",
@@ -47,15 +47,15 @@ await sw.expenses.createExpense({
 });
 ```
 
-## Authentifizierung
+## Authentication
 
-Das SDK verwendet **Access Token Injection**. Der OAuth-Flow findet außerhalb des SDK statt – das SDK setzt lediglich den `Authorization: Bearer <token>` Header.
+The SDK uses **access token injection**. OAuth flow happens outside the SDK — it only sets the `Authorization: Bearer <token>` header.
 
 ```typescript
-// Statischer Token
+// Static token
 const sw = new Splitwise({ accessToken: "my-token" });
 
-// Dynamischer Token (sync oder async)
+// Dynamic token (sync or async)
 const sw = new Splitwise({
   accessToken: async () => {
     const token = await fetchTokenFromVault();
@@ -64,13 +64,13 @@ const sw = new Splitwise({
 });
 ```
 
-> **Breaking Change:** `consumerKey`/`consumerSecret` und die `oauth`-Abhängigkeit wurden entfernt.
+> **Breaking change:** `consumerKey`/`consumerSecret` and the `oauth` dependency were removed.
 
-## API-Endpunkte
+## Endpoints
 
-Alle Endpunkte sind über typisierte Repositories verfügbar:
+All endpoints are available through typed repositories:
 
-| Repository         | Methoden                                                                                                        |
+| Repository         | Methods                                                                                                         |
 | ------------------ | --------------------------------------------------------------------------------------------------------------- |
 | `sw.users`         | `getCurrentUser`, `getUser`, `updateUser`                                                                       |
 | `sw.groups`        | `getGroups`, `getGroup`, `createGroup`, `deleteGroup`, `undeleteGroup`, `addUserToGroup`, `removeUserFromGroup` |
@@ -81,7 +81,7 @@ Alle Endpunkte sind über typisierte Repositories verfügbar:
 | `sw.currencies`    | `getCurrencies`                                                                                                 |
 | `sw.categories`    | `getCategories`                                                                                                 |
 
-## Konfiguration
+## Configuration
 
 ```typescript
 import { Splitwise, SilentLogger } from "splitwise-sdk";
@@ -89,27 +89,27 @@ import { Splitwise, SilentLogger } from "splitwise-sdk";
 const sw = new Splitwise({
   accessToken: "your_token",
 
-  // Logging: LogLevel-String, Logger-Objekt oder Callback
-  logger: "debug", // oder new SilentLogger() oder (msg) => console.log(msg)
+  // Logging: log level string, Logger object, or callback
+  logger: "debug", // or new SilentLogger() or (msg) => console.log(msg)
 
-  // Retry-Konfiguration
+  // Retry config
   retry: {
     maxRetries: 3, // default
     baseDelayMs: 500,
     maxDelayMs: 30_000,
   },
 
-  // Cache-Konfiguration
+  // Cache config
   cache: {
     enabled: true, // default
-    defaultTtlMs: 300_000, // 5 Minuten
+    defaultTtlMs: 300_000, // 5 minutes
   },
 });
 ```
 
-## Fehlerbehandlung
+## Error Handling
 
-Das SDK wirft typisierte Fehler, die über `instanceof` abgefangen werden können:
+The SDK throws typed errors catchable via `instanceof`:
 
 ```typescript
 import {
@@ -123,26 +123,26 @@ try {
   await sw.expenses.getExpense(999);
 } catch (err) {
   if (err instanceof NotFoundError) {
-    console.log("Ausgabe nicht gefunden");
+    console.log("Expense not found");
   } else if (err instanceof RateLimitError) {
-    console.log(`Rate Limit – Retry nach ${err.retryAfter}s`);
+    console.log(`Rate limited — retry after ${err.retryAfter}s`);
   } else if (err instanceof ValidationError) {
-    console.log("Validierungsfehler:", err.details);
+    console.log("Validation error:", err.details);
   }
 }
 ```
 
-## Dokumentation
+## Documentation
 
-- [Architekturüberblick](docs/architecture.md)
-- [Fehlerbehandlung](docs/error-handling.md)
+- [Architecture](docs/architecture.md)
+- [Error Handling](docs/error-handling.md)
 - [Retry & Caching](docs/retry-caching.md)
 - [Migration Guide](docs/migration-guide.md)
-- [Beispiele](examples/)
+- [Examples](examples/)
 
-## Entwicklung
+## Development
 
-### Voraussetzungen
+### Prerequisites
 
 - Node.js >= 20.19.0
 - npm
@@ -155,27 +155,27 @@ npm ci
 
 ### Scripts
 
-| Script                 | Beschreibung                           |
+| Script                 | Description                            |
 | ---------------------- | -------------------------------------- |
-| `npm run build`        | Baut ESM + CJS + DTS mit tsup          |
-| `npm test`             | Tests mit node:test + c8 Coverage      |
-| `npm run typegen`      | Generiert Client-Code aus openapi.json |
-| `npm run check:type`   | TypeScript Typecheck                   |
+| `npm run build`        | Build ESM + CJS + DTS via tsup         |
+| `npm test`             | Run tests with node:test + c8 coverage |
+| `npm run typegen`      | Generate types from openapi.json       |
+| `npm run check:type`   | TypeScript type check                  |
 | `npm run check:lint`   | Oxlint                                 |
-| `npm run check:format` | Prettier Check                         |
+| `npm run check:format` | Prettier check                         |
 
 ### Semantic Commits
 
-Dieses Projekt verwendet [Conventional Commits](https://www.conventionalcommits.org/) mit `semantic-release` für automatisierte Releases.
+This project uses [Conventional Commits](https://www.conventionalcommits.org/) with `semantic-release` for automated releases.
 
-### Typen generieren
+### Type Generation
 
 ```bash
 npm run typegen
 ```
 
-Dies führt `@hey-api/openapi-ts` aus und generiert den typisierten Client in `src/generated/`. Die generierten Dateien werden committet, aber niemals manuell editiert.
+Runs `@hey-api/openapi-ts` to generate the typed client in `src/generated/`. Generated files are committed but never manually edited.
 
-## Lizenz
+## License
 
 [MIT](LICENSE)

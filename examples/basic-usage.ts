@@ -1,8 +1,8 @@
 /**
- * Grundlegende Nutzung des Splitwise SDK.
+ * Basic usage of the Splitwise SDK.
  *
- * Voraussetzung: ein gültiger Splitwise Access Token.
- * @see https://dev.splitwise.com/ für die Token-Erstellung.
+ * Requires a valid Splitwise access token.
+ * @see https://dev.splitwise.com/ to create a token.
  */
 import { Splitwise } from "splitwise-sdk";
 import { getExampleToken } from "./_env.js";
@@ -11,17 +11,17 @@ const sw = new Splitwise({
   accessToken: getExampleToken(),
 });
 
-// Aktuellen Benutzer abrufen
+// Get current user
 const { user } = await sw.users.getCurrentUser();
-console.log("Eingeloggt als:", user?.first_name, user?.last_name);
+console.log("Logged in as:", user?.first_name, user?.last_name);
 
-// Gruppen auflisten
+// List groups
 const { groups } = await sw.groups.getGroups();
 for (const group of groups ?? []) {
-  console.log(`Gruppe: ${group.name} (ID: ${group.id})`);
+  console.log(`Group: ${group.name} (ID: ${group.id})`);
 }
 
-// Ausgaben einer Gruppe laden
+// Load group expenses
 if (groups?.length) {
   const groupId = groups[0].id!;
   const { expenses } = await sw.expenses.getExpenses({
@@ -29,7 +29,7 @@ if (groups?.length) {
     limit: 3,
   });
 
-  console.log(`\nLetzte 3 Ausgaben in "${groups[0].name}":`);
+  console.log(`\nLast 3 expenses in "${groups[0].name}":`);
   for (const expense of expenses ?? []) {
     console.log(
       `  - ${expense.description}: ${expense.cost} ${expense.currency_code}`,
@@ -37,10 +37,10 @@ if (groups?.length) {
   }
 }
 
-// Freunde auflisten
+// List friends
 const { friends } = await sw.friends.getFriends();
-console.log(`\n${friends?.length ?? 0} Freunde gefunden`);
+console.log(`\n${friends?.length ?? 0} friends found`);
 
-// Währungen abrufen (werden automatisch gecacht)
+// Get currencies (automatically cached)
 const { currencies } = await sw.currencies.getCurrencies();
-console.log(`${currencies?.length ?? 0} Währungen verfügbar`);
+console.log(`${currencies?.length ?? 0} currencies available`);

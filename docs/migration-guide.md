@@ -1,19 +1,19 @@
 # Migration Guide: v0.x → v1.0
 
-Dieses Dokument beschreibt alle Breaking Changes beim Upgrade auf die neue Major-Version des Splitwise SDK.
+All breaking changes when upgrading to the new major version.
 
-## Übersicht der Breaking Changes
+## Breaking Changes Summary
 
-1. **Neue Client-Klasse**: `SplitwiseClient` → `Splitwise`
-2. **OAuth entfernt**: Kein `consumerKey`/`consumerSecret` mehr
-3. **Repository-Pattern**: Flache Methoden → verschachtelte Repositories
-4. **Typen aus Generated Code**: `src/types/api.ts` entfernt
-5. **Neues Logging**: Console-Callback → strukturiertes Logger-Interface
-6. **Node.js >= 20.19.0**: Minimum-Version angehoben
+1. **New client class**: `SplitwiseClient` → `Splitwise`
+2. **OAuth removed**: no more `consumerKey`/`consumerSecret`
+3. **Repository pattern**: flat methods → nested repositories
+4. **Generated types**: `src/types/api.ts` removed
+5. **New logging**: console callback → structured Logger interface
+6. **Node.js >= 20.19.0**: minimum version raised
 
-## 1. Client-Instanzierung
+## 1. Client Instantiation
 
-### Vorher (v1.x)
+### Before (v1.x)
 
 ```typescript
 import { SplitwiseClient } from "splitwise-sdk";
@@ -21,13 +21,13 @@ import { SplitwiseClient } from "splitwise-sdk";
 const sw = new SplitwiseClient({
   consumerKey: "your_key",
   consumerSecret: "your_secret",
-  // oder:
+  // or:
   accessToken: "your_token",
   logger: console.log,
 });
 ```
 
-### Nachher (v2.0)
+### After (v2.0)
 
 ```typescript
 import { Splitwise } from "splitwise-sdk";
@@ -35,34 +35,34 @@ import { Splitwise } from "splitwise-sdk";
 const sw = new Splitwise({
   accessToken: "your_token",
   // Optional:
-  logger: "info", // oder Logger-Objekt / Callback
+  logger: "info", // or Logger object / callback
   retry: { maxRetries: 3 },
   cache: { enabled: true },
 });
 ```
 
-**Änderung:**
+**Changes:**
 
-- Klasse heißt jetzt `Splitwise` (nicht `SplitwiseClient`)
-- `consumerKey`/`consumerSecret` wurden entfernt
-- OAuth-Flow muss extern implementiert werden
-- `accessToken` akzeptiert auch `() => string` oder `() => Promise<string>`
+- Class renamed to `Splitwise` (was `SplitwiseClient`)
+- `consumerKey`/`consumerSecret` removed
+- OAuth flow must be implemented externally
+- `accessToken` also accepts `() => string` or `() => Promise<string>`
 
-## 2. API-Aufrufe
+## 2. API Calls
 
-### Vorher (v1.x)
+### Before (v1.x)
 
 ```typescript
-// Methoden direkt auf dem Client
+// Methods directly on the client
 const user = await sw.getCurrentUser();
 const expenses = await sw.getExpenses({ group_id: 5 });
 await sw.createExpense({ cost: "10.00", description: "Lunch" });
 ```
 
-### Nachher (v2.0)
+### After (v2.0)
 
 ```typescript
-// Methoden über Repository-Objekte
+// Methods via repository objects
 const { user } = await sw.users.getCurrentUser();
 const { expenses } = await sw.expenses.getExpenses({ group_id: 5 });
 await sw.expenses.createExpense({ cost: "10.00", description: "Lunch" });
@@ -70,7 +70,7 @@ await sw.expenses.createExpense({ cost: "10.00", description: "Lunch" });
 
 **Mapping:**
 
-| Vorher                    | Nachher                               |
+| Before                    | After                                 |
 | ------------------------- | ------------------------------------- |
 | `sw.getCurrentUser()`     | `sw.users.getCurrentUser()`           |
 | `sw.getUser(id)`          | `sw.users.getUser(id)`                |
@@ -94,20 +94,20 @@ await sw.expenses.createExpense({ cost: "10.00", description: "Lunch" });
 | `sw.createComment(id, d)` | `sw.comments.createComment(id, d)`    |
 | `sw.getNotifications()`   | `sw.notifications.getNotifications()` |
 
-## 3. Fehlerbehandlung
+## 3. Error Handling
 
-### Vorher (v1.x)
+### Before (v1.x)
 
 ```typescript
 try {
   await sw.getExpense(999);
 } catch (err) {
-  // Generischer Error mit Message
+  // Generic error with message
   console.error(err.message);
 }
 ```
 
-### Nachher (v2.0)
+### After (v2.0)
 
 ```typescript
 import { NotFoundError, ValidationError, RateLimitError } from "splitwise-sdk";
@@ -118,73 +118,73 @@ try {
   if (err instanceof NotFoundError) {
     console.log(`Status: ${err.status}, Endpoint: ${err.endpoint}`);
   } else if (err instanceof RateLimitError) {
-    console.log(`Retry nach ${err.retryAfter}s`);
+    console.log(`Retry after ${err.retryAfter}s`);
   }
 }
 ```
 
-## 4. Typen
+## 4. Types
 
-### Vorher (v1.x)
+### Before (v1.x)
 
 ```typescript
 import type { User, Expense } from "splitwise-sdk";
-// Oder aus src/types/api.ts
+// Or from src/types/api.ts
 ```
 
-### Nachher (v2.0)
+### After (v2.0)
 
 ```typescript
-// Generated Types werden aus dem Paket re-exportiert
+// Generated types are re-exported from the package
 import type {
   GetGetCurrentUserResponse,
   PostCreateExpenseData,
 } from "splitwise-sdk";
 ```
 
-Die manuellen Typdateien (`src/types/api.ts`, `src/types/SplitwiseOptions.ts`, `src/types/openapi-types.ts`) wurden entfernt. Alle Typen stammen jetzt aus dem generierten Client.
+Manual type files (`src/types/api.ts`, `src/types/SplitwiseOptions.ts`, `src/types/openapi-types.ts`) were removed. All types now come from the generated client.
 
 ## 5. Logging
 
-### Vorher (v1.x)
+### Before (v1.x)
 
 ```typescript
 const sw = new SplitwiseClient({
-  logger: console.log, // Einfacher Callback
+  logger: console.log, // simple callback
 });
 ```
 
-### Nachher (v2.0)
+### After (v2.0)
 
 ```typescript
 import { Splitwise, DefaultLogger, SilentLogger } from "splitwise-sdk";
 
-// Option 1: Log-Level als String
+// Option 1: log level string
 const sw = new Splitwise({ accessToken: "...", logger: "debug" });
 
-// Option 2: Kein Logging
+// Option 2: no logging
 const sw = new Splitwise({ accessToken: "...", logger: new SilentLogger() });
 
-// Option 3: Callback (abwärtskompatibel)
+// Option 3: callback (backward compatible)
 const sw = new Splitwise({
   accessToken: "...",
   logger: (msg) => console.log(msg),
 });
 ```
 
-Logs sind jetzt strukturiert (JSON) und enthalten `requestId`, `durationMs`, `retryCount`.
+Logs are now structured (JSON) and include `requestId`, `durationMs`, `retryCount`.
 
-## 6. Entfernte Abhängigkeiten
+## 6. Removed Dependencies
 
-| Abhängigkeit         | Status   | Ersatz                 |
-| -------------------- | -------- | ---------------------- |
-| `oauth`              | Entfernt | Access Token Injection |
-| `@types/oauth`       | Entfernt | –                      |
-| `jest`               | Entfernt | `node:test` + `c8`     |
-| `@types/jest`        | Entfernt | –                      |
-| `openapi-typescript` | Entfernt | `@hey-api/openapi-ts`  |
+| Dependency           | Status  | Replacement            |
+| -------------------- | ------- | ---------------------- |
+| `oauth`              | Removed | access token injection |
+| `@types/oauth`       | Removed | –                      |
+| `jest`               | Removed | `node:test` + `c8`     |
+| `@types/jest`        | Removed | –                      |
+| `openapi-typescript` | Removed | `@hey-api/openapi-ts`  |
 
-## 7. Node.js-Version
+## 7. Node.js Version
 
-- **Vorher**: Keine explizite Mindestversion
-- **Nachher**: `node >= 20.19.0` (für native `fetch` und `node:test`)
+- **Before**: no explicit minimum version
+- **After**: `node >= 20.19.0` (for native `fetch` and `node:test`)

@@ -2,17 +2,17 @@
 
 ## Retry
 
-### Strategie
+### Strategy
 
-Das SDK verwendet **Exponential Backoff mit Jitter** für transiente Fehler:
+The SDK uses **exponential backoff with jitter** for transient errors:
 
 ```
-Delay = min(baseDelayMs × 2^attempt, maxDelayMs) × random(0..1)
+delay = min(baseDelayMs × 2^attempt, maxDelayMs) × random(0..1)
 ```
 
-Bei `RateLimitError` (429) wird der `Retry-After`-Header respektiert.
+For `RateLimitError` (429), the `Retry-After` header is respected.
 
-### Konfiguration
+### Configuration
 
 ```typescript
 import { Splitwise } from "splitwise-sdk";
@@ -27,21 +27,21 @@ const sw = new Splitwise({
 });
 ```
 
-### Retryable Fehler
+### Retryable Errors
 
-| Fehlertyp             | Status | Retry? |
+| Error type            | Status | Retry? |
 | --------------------- | ------ | ------ |
-| `NetworkError`        | –      | Ja     |
-| `RateLimitError`      | 429    | Ja     |
-| `SplitwiseApiError`   | 500    | Ja     |
-| `SplitwiseApiError`   | 502    | Ja     |
-| `SplitwiseApiError`   | 503    | Ja     |
-| `SplitwiseApiError`   | 504    | Ja     |
-| `ValidationError`     | 400    | Nein   |
-| `AuthenticationError` | 401    | Nein   |
-| `NotFoundError`       | 404    | Nein   |
+| `NetworkError`        | –      | Yes    |
+| `RateLimitError`      | 429    | Yes    |
+| `SplitwiseApiError`   | 500    | Yes    |
+| `SplitwiseApiError`   | 502    | Yes    |
+| `SplitwiseApiError`   | 503    | Yes    |
+| `SplitwiseApiError`   | 504    | Yes    |
+| `ValidationError`     | 400    | No     |
+| `AuthenticationError` | 401    | No     |
+| `NotFoundError`       | 404    | No     |
 
-### Retry deaktivieren
+### Disabling Retry
 
 ```typescript
 const sw = new Splitwise({
@@ -50,59 +50,59 @@ const sw = new Splitwise({
 });
 ```
 
-### Ablauf
+### Flow
 
 ```
-Attempt 0: Request → 500 → shouldRetry? Ja → Delay ~500ms
-Attempt 1: Request → 502 → shouldRetry? Ja → Delay ~1000ms
-Attempt 2: Request → 200 → Erfolg ✓
+Attempt 0: Request → 500 → shouldRetry? Yes → delay ~500ms
+Attempt 1: Request → 502 → shouldRetry? Yes → delay ~1000ms
+Attempt 2: Request → 200 → Success ✓
 
-// Oder bei permanentem Fehler:
-Attempt 0: Request → 500 → Delay ~500ms
-Attempt 1: Request → 500 → Delay ~1000ms
-Attempt 2: Request → 500 → Delay ~2000ms
-Attempt 3: Request → 500 → maxRetries erreicht → SplitwiseApiError geworfen
+// Or on persistent failure:
+Attempt 0: Request → 500 → delay ~500ms
+Attempt 1: Request → 500 → delay ~1000ms
+Attempt 2: Request → 500 → delay ~2000ms
+Attempt 3: Request → 500 → maxRetries reached → SplitwiseApiError thrown
 ```
 
 ---
 
 ## Caching
 
-### In-Memory TTL-Cache
+### In-Memory TTL Cache
 
-Das SDK cached GET-Anfragen automatisch mit einem In-Memory-Cache:
+The SDK automatically caches GET requests using an in-memory cache:
 
-- **TTL-basiert**: Einträge verfallen nach einer konfigurierbaren Zeit
-- **Token-spezifisch**: Verschiedene Tokens haben getrennte Caches (gehashter Fingerprint)
-- **Request-Deduplication**: Identische gleichzeitige Requests werden dedupliziert
+- **TTL-based** — entries expire after a configurable duration
+- **Token-specific** — different tokens use separate caches (hashed fingerprint)
+- **Request deduplication** — identical concurrent requests are deduplicated
 
-### Konfiguration
+### Configuration
 
 ```typescript
 const sw = new Splitwise({
   accessToken: "your_token",
   cache: {
     enabled: true, // default: true
-    defaultTtlMs: 300_000, // default: 5 Minuten
+    defaultTtlMs: 300_000, // default: 5 minutes
   },
 });
 ```
 
-### TTL-Overrides
+### TTL Overrides
 
-Bestimmte Endpunkte haben längere Default-TTLs:
+Some endpoints have longer default TTLs:
 
-| Endpunkt          | Default-TTL |
+| Endpoint          | Default TTL |
 | ----------------- | ----------- |
-| `/get_currencies` | 24 Stunden  |
-| `/get_categories` | 24 Stunden  |
-| Alle anderen      | 5 Minuten   |
+| `/get_currencies` | 24 hours    |
+| `/get_categories` | 24 hours    |
+| All others        | 5 minutes   |
 
-### Cache-Invalidation
+### Cache Invalidation
 
-Schreibende Operationen (POST) invalidieren automatisch den Cache der betroffenen Ressource:
+Write operations (POST) automatically invalidate the cache of the affected resource:
 
-| Operation       | Invalidiert     |
+| Operation       | Invalidates     |
 | --------------- | --------------- |
 | `createExpense` | `/get_expense`  |
 | `updateExpense` | `/get_expense`  |
@@ -112,12 +112,12 @@ Schreibende Operationen (POST) invalidieren automatisch den Cache der betroffene
 | `createFriend`  | `/get_friend`   |
 | `createComment` | `/get_comments` |
 
-### Request-Deduplication
+### Request Deduplication
 
-Wenn mehrere identische GET-Requests gleichzeitig laufen, wird nur ein einzelner Netzwerk-Request ausgeführt:
+When multiple identical GET requests run concurrently, only one network request executes:
 
 ```typescript
-// Nur EIN tatsächlicher HTTP-Request:
+// Only ONE actual HTTP request:
 const [user1, user2, user3] = await Promise.all([
   sw.users.getCurrentUser(),
   sw.users.getCurrentUser(),
@@ -125,20 +125,20 @@ const [user1, user2, user3] = await Promise.all([
 ]);
 ```
 
-### Token-spezifische Keys
+### Token-Specific Keys
 
-Cache-Keys enthalten einen gehashten Token-Fingerprint. Dadurch wird verhindert, dass Daten zwischen verschiedenen Benutzern geteilt werden:
+Cache keys include a hashed token fingerprint. This prevents data sharing between users:
 
 ```typescript
 const sw1 = new Splitwise({ accessToken: "token-alice" });
 const sw2 = new Splitwise({ accessToken: "token-bob" });
 
-// Diese Aufrufe verwenden getrennte Caches:
-await sw1.users.getCurrentUser(); // Cache-Key: "fp-alice:/get_current_user"
-await sw2.users.getCurrentUser(); // Cache-Key: "fp-bob:/get_current_user"
+// These calls use separate caches:
+await sw1.users.getCurrentUser(); // cache key: "fp-alice:/get_current_user"
+await sw2.users.getCurrentUser(); // cache key: "fp-bob:/get_current_user"
 ```
 
-### Cache deaktivieren
+### Disabling Cache
 
 ```typescript
 const sw = new Splitwise({
@@ -147,7 +147,7 @@ const sw = new Splitwise({
 });
 ```
 
-### Cache manuell leeren
+### Clearing Cache Manually
 
 ```typescript
 sw.clearCache();

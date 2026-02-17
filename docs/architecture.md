@@ -1,13 +1,13 @@
-# Architekturüberblick
+# Architecture
 
-## Generator-first Architektur
+## Generator-First Architecture
 
-Das Splitwise SDK folgt einem Generator-first-Ansatz: Der gesamte API-Client und die Typen werden automatisch aus der OpenAPI-Spezifikation generiert. Handgeschriebener Code wrappet den generierten Client und fügt Mehrwert hinzu.
+The Splitwise SDK uses a generator-first approach: the API client and types are auto-generated from the OpenAPI spec. Hand-written code wraps the generated client and adds caching, retry, and error mapping.
 
 ```
 ┌────────────────────────────────────────────┐
 │             Public API (index.ts)          │
-│       Splitwise-Klasse + Re-Exports        │
+│         Splitwise class + re-exports       │
 ├────────────────────────────────────────────┤
 │           Repositories                      │
 │  users · groups · expenses · friends · ...  │
@@ -22,30 +22,30 @@ Das Splitwise SDK folgt einem Generator-first-Ansatz: Der gesamte API-Client und
 └────────────────────────────────────────────┘
 ```
 
-## Schichten
+## Layers
 
 ### 1. Generated Client (`src/generated/`)
 
-- **Quelle**: `openapi.json` → `@hey-api/openapi-ts`
-- **Dateien**: `types.gen.ts`
-- **Regel**: Niemals manuell editieren. Regenerieren via `npm run typegen`.
+- **Source**: `openapi.json` → `@hey-api/openapi-ts`
+- **Files**: `types.gen.ts`
+- **Rule**: never edit manually. Regenerate via `npm run typegen`.
 
 ### 2. Core Layer (`src/core/`)
 
-| Modul             | Verantwortung                                         |
-| ----------------- | ----------------------------------------------------- |
-| `auth.ts`         | Token-Auflösung, Bearer-Header                        |
-| `errors.ts`       | Typisierte Error-Hierarchie, HTTP-Status-Mapping      |
-| `interceptors.ts` | Request-Lifecycle (Auth, Logging, Retry, Error-Parse) |
-| `http-client.ts`  | Zentraler HTTP-Client mit Cache-Integration           |
-| `logger.ts`       | Strukturiertes Logging mit requestId + durationMs     |
+| Module            | Responsibility                                          |
+| ----------------- | ------------------------------------------------------- |
+| `auth.ts`         | Token resolution, Bearer header                         |
+| `errors.ts`       | Typed error hierarchy, HTTP status mapping              |
+| `interceptors.ts` | Request lifecycle (auth, logging, retry, error parsing) |
+| `http-client.ts`  | Central HTTP client with cache integration              |
+| `logger.ts`       | Structured logging with requestId + durationMs          |
 
 ### 3. Repositories (`src/repositories/`)
 
-Jedes Repository kapselt eine API-Ressource:
+Each repository wraps an API resource:
 
 ```typescript
-// Beispiel: UsersRepository
+// Example: UsersRepository
 class UsersRepository extends BaseRepository {
   async getCurrentUser() {
     return this.http.get<GetGetCurrentUserResponse>("/get_current_user");
@@ -53,42 +53,42 @@ class UsersRepository extends BaseRepository {
 }
 ```
 
-- Erbt von `BaseRepository` (hält `HttpClient`-Referenz)
-- Typisiert über Generated Types
-- Schreibende Operationen invalidieren den zugehörigen Cache
+- Extends `BaseRepository` (holds `HttpClient` reference)
+- Typed via generated types
+- Write operations invalidate the corresponding cache
 
 ### 4. Utils (`src/utils/`)
 
-- **`retry.ts`**: Exponential Backoff + Jitter, `Retry-After`-Header-Support
-- **`cache.ts`**: In-Memory TTL-Cache, Request-Deduplication, token-spezifische Keys
+- **`retry.ts`** — exponential backoff + jitter, `Retry-After` header support
+- **`cache.ts`** — in-memory TTL cache, request deduplication, token-specific keys
 
 ### 5. Public API (`src/index.ts`)
 
-- `Splitwise`-Klasse als einziger Einstiegspunkt
-- Konfiguration über `SplitwiseOptions`
-- Re-Exports aller relevanten Typen und Error-Klassen
+- `Splitwise` class as single entry point
+- Configuration via `SplitwiseOptions`
+- Re-exports all relevant types and error classes
 
-## Request-Lifecycle
+## Request Lifecycle
 
 ```
-1. Repository-Methode aufgerufen
+1. Repository method called
 2. HttpClient.get()/post()
 3. executeWithInterceptors()
-   a. Token auflösen → Bearer-Header
-   b. requestId generieren (UUID)
+   a. Resolve token → Bearer header
+   b. Generate requestId (UUID)
    c. Log: "request started"
-   d. fetch() ausführen
-   e. Response prüfen
-      ├─ OK: Log "request succeeded", JSON parsen, zurückgeben
-      └─ Fehler: parseHttpError(), ggf. Retry
-4. Bei GET: Cache-Lookup vorab, Cache-Write nachher
-5. Bei POST: Cache-Invalidation für betroffene Ressource
+   d. Execute fetch()
+   e. Check response
+      ├─ OK: log "request succeeded", parse JSON, return
+      └─ Error: parseHttpError(), retry if eligible
+4. GET: cache lookup first, cache write after
+5. POST: cache invalidation for affected resource
 ```
 
-## Design-Entscheidungen
+## Design Decisions
 
-1. **Kein OAuth-Flow im SDK**: Token-Beschaffung ist Consumer-Verantwortung
-2. **Exception-basiertes Error-Handling**: Typisierte Fehlerklassen statt `Result<T, E>`
-3. **Repository-Pattern**: Klare Trennung zwischen Ressourcen
-4. **Kein Runtime-Validierung**: Keine Zod-Dependency im ersten Major
-5. **Zero Runtime Dependencies**: Nur native Node.js APIs (fetch, crypto)
+1. **No OAuth flow in SDK** — token acquisition is the consumer's responsibility
+2. **Exception-based error handling** — typed error classes
+3. **Repository pattern** — clear separation between resources
+4. **No runtime validation** — no Zod dependency
+5. **Zero runtime dependencies** — native Node.js APIs only (fetch, crypto)

@@ -1,38 +1,38 @@
 /**
- * Caching-Verhalten des SDK.
+ * Caching behavior of the SDK.
  *
- * Das SDK cached GET-Anfragen automatisch mit einem In-Memory TTL-Cache
- * und dedupliziert gleichzeitige identische Requests.
+ * GET requests are automatically cached in-memory with TTL.
+ * Identical concurrent requests are deduplicated.
  */
 import { SilentLogger, Splitwise } from "splitwise-sdk";
 import { getExampleToken } from "./_env.js";
 
-// ── Beispiel 1: Standard-Cache ───────────────────────────────────
+// ── Example 1: Default cache ─────────────────────────────────────
 
 const sw = new Splitwise({
   accessToken: getExampleToken(),
   logger: new SilentLogger(),
   cache: {
     enabled: true, // default
-    defaultTtlMs: 300_000, // 5 Minuten (default)
+    defaultTtlMs: 300_000, // 5 minutes (default)
   },
 });
 
-// Erster Aufruf: HTTP-Request wird ausgeführt
-console.time("Erster Aufruf");
+// First call: executes HTTP request
+console.time("First call");
 const result1 = await sw.users.getCurrentUser();
-console.timeEnd("Erster Aufruf");
+console.timeEnd("First call");
 
-// Zweiter Aufruf: Aus dem Cache (kein HTTP-Request)
-console.time("Zweiter Aufruf (cached)");
+// Second call: served from cache (no HTTP request)
+console.time("Second call (cached)");
 const result2 = await sw.users.getCurrentUser();
-console.timeEnd("Zweiter Aufruf (cached)");
+console.timeEnd("Second call (cached)");
 
-console.log("Gleiche Daten:", result1.user?.id === result2.user?.id);
+console.log("Same data:", result1.user?.id === result2.user?.id);
 
-// ── Beispiel 2: Request-Deduplication ────────────────────────────
+// ── Example 2: Request deduplication ─────────────────────────────
 
-// Gleichzeitige Requests werden dedupliziert – nur EIN HTTP-Request
+// Concurrent requests are deduplicated — only ONE HTTP request
 console.time("3x parallel");
 const [a, b, c] = await Promise.all([
   sw.users.getCurrentUser(),
@@ -41,32 +41,32 @@ const [a, b, c] = await Promise.all([
 ]);
 console.timeEnd("3x parallel");
 console.log(
-  "Alle gleich:",
+  "All equal:",
   a.user?.id === b.user?.id && b.user?.id === c.user?.id,
 );
 
-// ── Beispiel 3: Cache-Invalidation ──────────────────────────────
+// ── Example 3: Cache invalidation ───────────────────────────────
 
-// Schreibende Operationen invalidieren den Cache der betroffenen Ressource:
+// Write operations invalidate the affected resource cache:
 const { expenses } = await sw.expenses.getExpenses({ limit: 1 });
-console.log("Gecachte Ausgaben:", expenses?.length);
+console.log("Cached expenses:", expenses?.length);
 
-// createExpense invalidiert automatisch den Expense-Cache
-// await sw.expenses.createExpense({ cost: "5.00", description: "Kaffee" });
+// createExpense automatically invalidates the expense cache
+// await sw.expenses.createExpense({ cost: "5.00", description: "Coffee" });
 
-// Nächster getExpenses-Aufruf macht einen frischen HTTP-Request
+// Next getExpenses call makes a fresh HTTP request
 // const fresh = await sw.expenses.getExpenses({ limit: 1 });
 
-// ── Beispiel 4: Cache manuell leeren ─────────────────────────────
+// ── Example 4: Clear cache manually ──────────────────────────────
 
 sw.clearCache();
-console.log("Cache geleert");
+console.log("Cache cleared");
 
-// Nächster Aufruf macht wieder einen HTTP-Request
+// Next call makes a fresh HTTP request
 const fresh = await sw.users.getCurrentUser();
-console.log("Frische Daten:", fresh.user?.first_name);
+console.log("Fresh data:", fresh.user?.first_name);
 
-// ── Beispiel 5: Cache deaktivieren ───────────────────────────────
+// ── Example 5: Disable cache ─────────────────────────────────────
 
 const noCacheSw = new Splitwise({
   accessToken: getExampleToken(),
@@ -74,6 +74,6 @@ const noCacheSw = new Splitwise({
   cache: { enabled: false },
 });
 
-// Jeder Aufruf macht einen HTTP-Request
+// Every call makes an HTTP request
 await noCacheSw.users.getCurrentUser();
-await noCacheSw.users.getCurrentUser(); // Kein Cache, neuer Request
+await noCacheSw.users.getCurrentUser(); // no cache, new request

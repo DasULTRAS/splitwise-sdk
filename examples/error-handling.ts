@@ -1,8 +1,8 @@
 /**
- * Fehlerbehandlung mit typisierten Error-Klassen.
+ * Error handling with typed error classes.
  *
- * Das SDK wirft spezifische Fehlerklassen für verschiedene HTTP-Statuscodes.
- * Diese können über `instanceof` abgefangen und behandelt werden.
+ * The SDK throws specific error classes per HTTP status code.
+ * Use `instanceof` to handle them.
  */
 import {
   AuthenticationError,
@@ -19,20 +19,20 @@ import { getExampleToken } from "./_env.js";
 const sw = new Splitwise({
   accessToken: getExampleToken(),
   logger: new SilentLogger(),
-  retry: { maxRetries: 0 }, // Retries deaktivieren für dieses Beispiel
+  retry: { maxRetries: 0 }, // disable retries for this example
 });
 
-// ── Beispiel 1: Ressource nicht gefunden ─────────────────────────
+// ── Example 1: Resource not found ────────────────────────────────
 
 async function getExpenseById(id: number): Promise<void> {
   try {
     const result = await sw.expenses.getExpense(id);
-    console.log("Ausgabe gefunden:", result.expense?.description);
+    console.log("Expense found:", result.expense?.description);
   } catch (err) {
     if (err instanceof NotFoundError) {
-      console.log(`Ausgabe ${id} nicht gefunden (Status: ${err.status})`);
-      console.log(`Endpunkt: ${err.endpoint}`);
-      console.log(`Request-ID: ${err.requestId}`);
+      console.log(`Expense ${id} not found (status: ${err.status})`);
+      console.log(`Endpoint: ${err.endpoint}`);
+      console.log(`Request ID: ${err.requestId}`);
     } else {
       throw err;
     }
@@ -41,7 +41,7 @@ async function getExpenseById(id: number): Promise<void> {
 
 await getExpenseById(999999999);
 
-// ── Beispiel 2: Authentifizierungsfehler ─────────────────────────
+// ── Example 2: Authentication error ─────────────────────────────
 
 async function testInvalidToken(): Promise<void> {
   const badClient = new Splitwise({
@@ -54,7 +54,7 @@ async function testInvalidToken(): Promise<void> {
     await badClient.users.getCurrentUser();
   } catch (err) {
     if (err instanceof AuthenticationError) {
-      console.log("\nAuthentifizierungsfehler: Token ist ungültig");
+      console.log("\nAuthentication error: token is invalid");
       console.log(`Status: ${err.status}`);
     }
   }
@@ -62,22 +62,22 @@ async function testInvalidToken(): Promise<void> {
 
 await testInvalidToken();
 
-// ── Beispiel 3: Catch-all für API-Fehler ─────────────────────────
+// ── Example 3: Catch-all for API errors ──────────────────────────
 
 async function safeRequest(): Promise<void> {
   try {
     await sw.users.getCurrentUser();
-    console.log("\nRequest erfolgreich");
+    console.log("\nRequest succeeded");
   } catch (err) {
     if (err instanceof RateLimitError) {
-      console.log(`Rate Limit! Retry nach ${err.retryAfter} Sekunden`);
+      console.log(`Rate limited! Retry after ${err.retryAfter} seconds`);
     } else if (err instanceof ValidationError) {
-      console.log("Validierungsfehler:", err.details);
+      console.log("Validation error:", err.details);
     } else if (err instanceof NetworkError) {
-      console.log("Netzwerkfehler:", err.message);
+      console.log("Network error:", err.message);
     } else if (err instanceof SplitwiseApiError) {
-      // Catch-all für alle anderen API-Fehler
-      console.log(`API-Fehler ${err.status}: ${err.message}`);
+      // catch-all for other API errors
+      console.log(`API error ${err.status}: ${err.message}`);
       console.log(`Retryable: ${err.retryable}`);
     }
   }
