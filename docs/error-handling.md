@@ -1,8 +1,8 @@
-# Fehlerbehandlung
+# Error Handling
 
-## Error-Hierarchie
+## Error Hierarchy
 
-Das SDK verwendet eine typisierte Fehler-Hierarchie, die HTTP-Statuscodes auf spezifische Error-Klassen abbildet:
+The SDK maps HTTP status codes to typed error classes:
 
 ```
 Error
@@ -17,9 +17,9 @@ Error
     └── NetworkError              (fetch / timeout)
 ```
 
-## Verwendung
+## Usage
 
-### Grundlegendes Error-Handling
+### Basic Error Handling
 
 ```typescript
 import { Splitwise, NotFoundError, ValidationError } from "splitwise-sdk";
@@ -30,110 +30,110 @@ try {
   await sw.expenses.getExpense(999);
 } catch (err) {
   if (err instanceof NotFoundError) {
-    console.log(`Ressource nicht gefunden: ${err.endpoint}`);
+    console.log(`Resource not found: ${err.endpoint}`);
   } else if (err instanceof ValidationError) {
-    console.log(`Validierungsfehler:`, err.details);
+    console.log(`Validation error:`, err.details);
   } else {
-    throw err; // Unbekannter Fehler weiterwerfen
+    throw err; // re-throw unknown errors
   }
 }
 ```
 
-### Alle Error-Klassen
+### Error Classes
 
 #### `SplitwiseError`
 
-Basis-Klasse für alle SDK-Fehler.
+Base class for all SDK errors.
 
 ```typescript
-const err = new SplitwiseError("Etwas ist schiefgelaufen", cause);
-err.message; // "Etwas ist schiefgelaufen"
-err.cause; // Original-Error (optional)
+const err = new SplitwiseError("Something went wrong", cause);
+err.message; // "Something went wrong"
+err.cause; // original error (optional)
 ```
 
 #### `SplitwiseApiError`
 
-Basis-Klasse für alle HTTP-API-Fehler.
+Base class for all HTTP API errors.
 
 ```typescript
-err.status; // HTTP-Statuscode (z.B. 500)
-err.endpoint; // Aufgerufener Endpunkt (z.B. "/get_expense/123")
-err.requestId; // UUID zur Korrelation
-err.details; // Response-Body (falls vorhanden)
-err.retryable; // true für 5xx, 429; false für 4xx
+err.status; // HTTP status code (e.g. 500)
+err.endpoint; // called endpoint (e.g. "/get_expense/123")
+err.requestId; // UUID for correlation
+err.details; // response body (if available)
+err.retryable; // true for 5xx, 429; false for 4xx
 ```
 
 #### `AuthenticationError` (401)
 
-Der Access Token fehlt oder ist ungültig.
+Access token is missing or invalid.
 
 ```typescript
 if (err instanceof AuthenticationError) {
-  // Token erneuern und erneut versuchen
+  // refresh token and retry
 }
 ```
 
 #### `AuthorizationError` (403)
 
-Zugriff verweigert – der Token hat nicht die nötigen Berechtigungen.
+Access denied — insufficient permissions.
 
 #### `NotFoundError` (404)
 
-Die angeforderte Ressource existiert nicht.
+Requested resource does not exist.
 
 #### `ValidationError` (400 / 422)
 
-Die Anfrage enthält ungültige Daten.
+Request contains invalid data.
 
 ```typescript
 if (err instanceof ValidationError) {
-  console.log(err.details); // API-Validierungsfehler
+  console.log(err.details); // API validation errors
 }
 ```
 
 #### `ConflictError` (409)
 
-Konflikt bei der Anfrage (z.B. doppelte Erstellung).
+Request conflict (e.g. duplicate creation).
 
 #### `RateLimitError` (429)
 
-Rate Limit überschritten. Enthält `retryAfter` in Sekunden.
+Rate limit exceeded. Contains `retryAfter` in seconds.
 
 ```typescript
 if (err instanceof RateLimitError) {
-  console.log(`Warte ${err.retryAfter} Sekunden`);
+  console.log(`Wait ${err.retryAfter} seconds`);
 }
 ```
 
 #### `NetworkError`
 
-Netzwerkfehler (DNS, Timeout, Verbindungsabbruch). Immer als retryable markiert.
+Network failure (DNS, timeout, connection reset). Always retryable.
 
-## Error-Properties
+## Error Properties
 
-| Property     | Typ                   | Verfügbar in                            |
+| Property     | Type                  | Available in                            |
 | ------------ | --------------------- | --------------------------------------- |
-| `message`    | `string`              | Alle                                    |
-| `cause`      | `unknown`             | Alle                                    |
+| `message`    | `string`              | All                                     |
+| `cause`      | `unknown`             | All                                     |
 | `status`     | `number`              | `SplitwiseApiError`+                    |
 | `endpoint`   | `string`              | `SplitwiseApiError`+                    |
 | `requestId`  | `string`              | `SplitwiseApiError`+                    |
 | `details`    | `unknown`             | `SplitwiseApiError`+                    |
-| `retryable`  | `boolean`             | `SplitwiseApiError`+ und `NetworkError` |
+| `retryable`  | `boolean`             | `SplitwiseApiError`+ and `NetworkError` |
 | `retryAfter` | `number \| undefined` | `RateLimitError`                        |
 
-## Retry-Verhalten
+## Retry Behavior
 
-Fehler werden automatisch durch den HTTP-Layer auf Retryability geprüft:
+The HTTP layer checks errors for retryability:
 
 - **Retryable**: `NetworkError`, HTTP 429, 500, 502, 503, 504
-- **Nicht retryable**: HTTP 400, 401, 403, 404, 409, 422
+- **Not retryable**: HTTP 400, 401, 403, 404, 409, 422
 
-Siehe [Retry & Caching](retry-caching.md) für Details zur Retry-Strategie.
+See [Retry & Caching](retry-caching.md) for retry strategy details.
 
-## `instanceof`-Prüfung
+## `instanceof` Checks
 
-Alle Error-Klassen unterstützen `instanceof`:
+All error classes support `instanceof`:
 
 ```typescript
 import {
@@ -145,9 +145,9 @@ import {
 try {
   await sw.users.getCurrentUser();
 } catch (err) {
-  err instanceof AuthenticationError; // true für 401
-  err instanceof SplitwiseApiError; // true für alle HTTP-Fehler
-  err instanceof SplitwiseError; // true für alle SDK-Fehler
+  err instanceof AuthenticationError; // true for 401
+  err instanceof SplitwiseApiError; // true for all HTTP errors
+  err instanceof SplitwiseError; // true for all SDK errors
   err instanceof Error; // true
 }
 ```

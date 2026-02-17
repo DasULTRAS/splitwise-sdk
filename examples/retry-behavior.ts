@@ -1,34 +1,33 @@
 /**
- * Retry-Verhalten des SDK.
+ * Retry behavior of the SDK.
  *
- * Das SDK implementiert automatisches Retry mit Exponential Backoff + Jitter
- * für transiente Fehler (5xx, 429, Netzwerkfehler).
+ * Auto-retries transient errors (5xx, 429, network) with exponential backoff + jitter.
  */
 import { SilentLogger, Splitwise } from "splitwise-sdk";
 import { getExampleToken } from "./_env.js";
 
-// ── Beispiel 1: Standard-Retry (3 Versuche) ─────────────────────
+// ── Example 1: Default retry (3 attempts) ────────────────────────
 
 const sw = new Splitwise({
   accessToken: getExampleToken(),
-  logger: "debug", // Zeigt Retry-Logs mit retryCount
+  logger: "debug", // shows retry logs with retryCount
   retry: {
-    maxRetries: 3, // Bis zu 3 Wiederholungen (default)
-    baseDelayMs: 500, // Startdelay: 500ms
-    maxDelayMs: 30_000, // Maximal 30 Sekunden warten
+    maxRetries: 3, // up to 3 retries (default)
+    baseDelayMs: 500, // initial delay: 500ms
+    maxDelayMs: 30_000, // max 30 seconds
   },
 });
 
-// Bei einem 500er-Fehler wird automatisch bis zu 3x wiederholt:
-// Attempt 0: Request → 500 → Delay ~500ms
-// Attempt 1: Request → 500 → Delay ~1000ms
-// Attempt 2: Request → 500 → Delay ~2000ms
-// Attempt 3: Request → 200 → Erfolg
+// On a 500 error, retries up to 3 times:
+// Attempt 0: Request → 500 → delay ~500ms
+// Attempt 1: Request → 500 → delay ~1000ms
+// Attempt 2: Request → 500 → delay ~2000ms
+// Attempt 3: Request → 200 → success
 
 const { user } = await sw.users.getCurrentUser();
 console.log("User:", user?.first_name);
 
-// ── Beispiel 2: Retry deaktivieren ───────────────────────────────
+// ── Example 2: Disable retry ─────────────────────────────────────
 
 const noRetrySw = new Splitwise({
   accessToken: getExampleToken(),
@@ -39,20 +38,20 @@ const noRetrySw = new Splitwise({
 try {
   await noRetrySw.users.getCurrentUser();
 } catch (err) {
-  console.log("Fehler ohne Retry:", (err as Error).message);
+  console.log("Error without retry:", (err as Error).message);
 }
 
-// ── Beispiel 3: Aggressives Retry ────────────────────────────────
+// ── Example 3: Aggressive retry ──────────────────────────────────
 
 const aggressiveSw = new Splitwise({
   accessToken: getExampleToken(),
   logger: "warn",
   retry: {
-    maxRetries: 5, // Mehr Versuche
-    baseDelayMs: 200, // Kürzerer Startdelay
-    maxDelayMs: 10_000, // Niedrigerer Max-Delay
+    maxRetries: 5, // more attempts
+    baseDelayMs: 200, // shorter initial delay
+    maxDelayMs: 10_000, // lower max delay
   },
 });
 
 const { groups } = await aggressiveSw.groups.getGroups();
-console.log(`${groups?.length ?? 0} Gruppen geladen`);
+console.log(`${groups?.length ?? 0} groups loaded`);
